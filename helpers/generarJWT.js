@@ -22,19 +22,18 @@ const generarJWT = (uid='') => {
 
 
 //SOCKETS
-
 const comprobarJWT = async(token='') => {
-    console.log('estoy en comprobar JWT'.yellow)
-    console.log('token ',token)
+    //console.log('estoy en comprobar JWT'.yellow)
+    //console.log('token ',token)
     try{
         if(token.length<10){
             return null;
         }
         const {uid}=jwt.verify(token,process.env.SECRETOPRIVATEKEY)
-        console.log('uid ',uid)
+        //console.log('uid ',uid)
         const usuario       = await Usuario.findById(uid);
-        console.log('desde el helper');
-        console.log(usuario);
+        //console.log('desde el helper');
+       // console.log(usuario);
         if (usuario){
             if (usuario.estado){
                 return usuario
@@ -44,8 +43,6 @@ const comprobarJWT = async(token='') => {
     }catch(err){
         return null;
     }
-
-
 }
 
 module.exports={

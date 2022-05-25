@@ -9,9 +9,6 @@
 
 ## GET, Obtener base de datos. Puedo definir "desde" y "limite" de la petición url/api/usuarios?limite=15&desde=3
 
-
-
-
 ### controllers: Están los controladores de mis rutas
 
 ### database: Base de datos
@@ -20,7 +17,13 @@
 
 ### middlewares: Funciones para llegar a ciertos archivos
 
-
-
 ### En mongo atlas, network access debes agregar la ip 0.0.0.0/0
-### Agregar en la configuracion de la api de Google Sign In, en "origenes autorizados de Javascrpit" la url ### correspondiente a la app: "https://NOMBRE_DE_LA_APP.herokuapp.com"
+### Agregar en la configuracion de la api de Google Sign In, en "origenes autorizados de Javascrpit" la url 
+### correspondiente a la app: "https://NOMBRE_DE_LA_APP.herokuapp.com"
+
+
+# Aplicación Sockets
+
+## Sala de Chat,  enviar mensajes a todos y en privado
+## conocer usuarios conectados
+## cargar ultimos 10 chats

@@ -1,6 +1,7 @@
 let usuario = null;
 let socket  = null;
 
+//Traigo los elementos del html
 const txtUid     = document.querySelector('#txtUid');
 const txtmensaje = document.querySelector('#txtmensaje');
 const ulUsuarios = document.querySelector('#ulUsuarios');
@@ -9,27 +10,24 @@ const btnSalir   = document.querySelector('#btnSalir');
 
 const enlace='/api/auth/' 
 
-console.log('estoy en chat.js')
-
 // Validar el JWT en el frontEND
 const validarJWT = async() => {
     
-    console.log('chatjs - validarJWT')
-    
+    //Traemos el token de localStorage
     const token = localStorage.getItem('token')||'';
 
-    if (token.length <= 10){
+    if (token.length <= 10){ //No hay token
         window.location='index.html' //redireccionamiento
         throw new Error('No hay token en el eservidor')
     }
 
-    console.log('el token es ...',token)
-
-    const resp = await fetch(enlace,{   //hago la petición get y genero un nuevo token
+    //hago la petición get y para renovar token
+    const resp = await fetch(enlace,{   
         headers:{'c-token':token}
     });
-    
-    const {usuario: userDb, token:tokenDB}= await resp.json(); //la respuesta de la petición tiene estos dos valores
+
+    //la respuesta de la petición tiene estos dos valores y los clono
+    const {usuario: userDb, token:tokenDB}= await resp.json(); 
     localStorage.setItem('token',tokenDB) //Renuevo el JWT
     usuario=userDb;
     document.title = usuario.nombre; //El texto de la pestaña de chat.html
@@ -38,30 +36,22 @@ const validarJWT = async() => {
 
 const conectarSocket = async()=>{
     socket=io({
-        'extraHeaders':{  //enviamos headers adicionales para esta conexión
+        'extraHeaders':{//enviamos headers adicionales para esta conexión
             'c-token': localStorage.getItem('token')
         }
     });
 
-    socket.on('connect',()=>{
-        console.log('sockets online')
-    })
+    socket.on('connect',()=>{console.log('sockets online')})
+    socket.on('disconnect',()=>{console.log('sockets disconnect')});
 
-    socket.on('disconnect',()=>{
-        console.log('sockets disconnect')
-        
-    });
-
+    //Recibo el backend emite un arreglo con los ultimos mensajes del chat
     socket.on('recibir-mensajes',(payload)=>{
-        console.log(payload)
-        dibujarMensajes(payload)
+        dibujarMensajes(payload)//Los muestro en el front
     })
 
     //Mostrar en el front los usuarios conectados al chat
     socket.on('usuarios-activos',(payload)=>{
-        console.log('voy a dibujar usuarios')
-        console.log(payload)
-        dibujarUsuarios(payload)
+        dibujarUsuarios(payload)//Los muestro en el front
     })
 
     socket.on('mensaje-privado',(payload)=>{
@@ -99,29 +89,20 @@ const dibujarMensajes=(mensajes=[])=>{
     })
 }
 
-
+//Cuando tecleo y undo enter envío mensaje a los demás clientes
 txtMensaje.addEventListener('keyup',({keyCode})=>{
-    console.log(keyCode)
-    
     const mensaje  = txtMensaje.value;
     const uid      = txtUid.value
-
     if(keyCode !=13){return;} //13 corresponde al enter
     if(mensaje.length===0){return;}
-
+    //Emito all backend, paso el mensaje y mi id
     socket.emit('enviar-mensaje',{uid,mensaje})
     txtMensaje.value = '';
-
 })
 
-
-
-
 const main = async () => {
-    console.log('chat.js - main')
     await validarJWT();
 }
-
 main();
 //const socket = io();
 

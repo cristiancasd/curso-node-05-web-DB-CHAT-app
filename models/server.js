@@ -60,9 +60,9 @@ class Server{
         this.app.use(this.paths.buscar,require('../routes/buscar'));
         this.app.use(this.paths.uploads,require('../routes/uploads'));
     }
-
+ 
     sockets(){
-        this.io.on('connection',socketController)
+        this.io.on('connection', socketController)
     }
 
     listen(){       //No está en el constructor

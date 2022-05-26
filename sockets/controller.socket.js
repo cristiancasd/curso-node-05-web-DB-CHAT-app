@@ -16,6 +16,8 @@ const socketController=async (socket=new Socket())=>{
 
     //Cuando defino una sala
     socket.on('user-sala',({salat})=>{ 
+
+        if(salat!='') socket.join(salat)
         
         //Cambio la sala donde está conectado el usuario en el objeto Usuario
         chatMensajes.conectarUsuario({usuario,salat});
@@ -25,22 +27,18 @@ const socketController=async (socket=new Socket())=>{
         try{//Emito los ultimos 10 mensajes de la sala
             if(salat==''){
                 socket.emit('recibir-mensajes',chatMensajes.ultimos10)  //emito nuevo arreglo con el mensaje
-                socket.broadcast.emit('recibir-mensajes',chatMensajes.ultimos10)
             }else{      
                 if(chatMensajes.ultimos10Sala[salat] ){
                     socket.emit('recibir-mensajes',chatMensajes.ultimos10Sala[salat])  //emito nuevo arreglo con el mensaje
-                    socket.broadcast.emit('recibir-mensajes',chatMensajes.ultimos10Sala[salat])
                 }else{
                     socket.emit('recibir-mensajes',[{nombre:'',mensaje:'',sala:''}])  //emito nuevo arreglo con el mensaje
-                    socket.broadcast.emit('recibir-mensajes',[{nombre:'',mensaje:'',sala:''}])
                 }                
             }
 
         }catch(err){ //Si no hay mensajes previos
             socket.emit('recibir-mensajes',[])  //emito nuevo arreglo con el mensaje
-            socket.broadcast.emit('recibir-mensajes',[{nombre:'',mensaje:'',sala:''}])
-        }
-        
+            //socket.broadcast.emit('recibir-mensajes',[{nombre:'',mensaje:'',sala:''}])
+        }       
 
     })
 
@@ -56,19 +54,24 @@ const socketController=async (socket=new Socket())=>{
     
     //Recibir mensaje y enviarlo a todos o privado
     socket.on('enviar-mensaje',({uid ,mensaje,salat})=>{
-        
         if(uid){    // Es un mensaje privado
             socket.to(uid).emit('mensaje-privado',{de: usuario.nombre, mensaje})
+
         }else{
             chatMensajes.enviarMensaje(usuario.id, usuario.nombre, mensaje,salat)//Agrego al arreglo el mensaje
+            
             if(salat==''){ //Sala General
                 socket.emit('recibir-mensajes',chatMensajes.ultimos10)  //emito nuevo arreglo con el mensaje
                 socket.broadcast.emit('recibir-mensajes',chatMensajes.ultimos10)
             }else{ // Es una sala diferente
+
+                socket.broadcast.to(salat).emit('recibir-mensajes',chatMensajes.ultimos10Sala[salat])  //emito nuevo arreglo con el mensaje
                 socket.emit('recibir-mensajes',chatMensajes.ultimos10Sala[salat])  //emito nuevo arreglo con el mensaje
-                socket.broadcast.emit('recibir-mensajes',chatMensajes.ultimos10Sala[salat])
+
             }
         }
+
+ 
     })
 
     // Limpiar cuando alguien se desconecta

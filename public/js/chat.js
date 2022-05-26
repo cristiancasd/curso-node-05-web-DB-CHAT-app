@@ -70,6 +70,11 @@ const conectarSocket = async()=>{
     socket.on('mensaje-privado',(payload)=>{
         console.log('Privado:',payload)
     }) 
+
+    socket.on('mensaje-clase',(payload)=>{
+        dibujarMensajes(payload)
+    }) 
+
 }
 
 const dibujarUsuarios=(usuarios=[])=>{

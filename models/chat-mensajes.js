@@ -50,12 +50,12 @@ class ChatMensajes{
         }        
     }
 
-    conectarUsuario({usuario,salat=''}){//Agrego usuario conectado al arreglo
+    conectarUsuario({usuario,salat}){//Agrego usuario conectado al arreglo
         //console.log('============modelo=====================')
         //console.log(usuario)
         
         this.usuarios[usuario.id] = {usuario,salat}
-        //console.log(salat)
+        //console.log('estoy en conectar usuario',salat)
         //console.log(this.usuarios)
         this.salas[salat]=this.salas[salat];
         //console.log(this.salas);

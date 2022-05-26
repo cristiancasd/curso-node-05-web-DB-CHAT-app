@@ -12,6 +12,20 @@ const btnSalir   = document.querySelector('#btnSalir');
 
 const enlace='/api/auth/' 
 
+//Leer los parametros del URL
+const searchParams = new URLSearchParams(window.location.search);
+let salat='';
+//Si no está el parametro escritorio, dar error y volver al index
+if (!searchParams.has('salaCHAT')){
+    
+    salat='';
+}else{
+    salat=searchParams.get('salaCHAT');
+}
+
+console.log('salat es B',salat)
+
+
 // Validar el JWT en el frontEND
 const validarJWT = async() => {
     
@@ -35,22 +49,24 @@ const validarJWT = async() => {
     document.title = usuario.nombre; //El texto de la pestaña de chat.html
     await conectarSocket()
 } 
-var salat=''
+
+
 //Defino la sala
-const miForm = document.querySelector('form');
-miForm.addEventListener('submit',ev=>{
-    ev.preventDefault();
-    var salat  = sala.value;
-    console.log(salat)
-    socket.emit('user-sala',{salat})
-})
+//const miForm = document.querySelector('form');
+//miForm.addEventListener('submit',ev=>{
+    //ev.preventDefault();
+   // let salat  = sala.value;
+    //console.log(salat)
+    //socket.emit('user-sala',{salat})   
+//})
 
 
 const conectarSocket = async()=>{
 
     socket=io({
         'extraHeaders':{//enviamos headers adicionales para esta conexión
-            'c-token': localStorage.getItem('token')
+            'c-token': localStorage.getItem('token'),
+            'salat':salat
         }
     });
 
@@ -71,9 +87,7 @@ const conectarSocket = async()=>{
         console.log('Privado:',payload)
     }) 
 
-    socket.on('mensaje-clase',(payload)=>{
-        dibujarMensajes(payload)
-    }) 
+   
 
 }
 
@@ -82,7 +96,8 @@ const dibujarUsuarios=(usuarios=[])=>{
     //usuarios.forEach(({nombre,uid})=>{
         usuarios.forEach(({usuario,salat:sal})=>{
         
-        if (sal==sala.value){
+        //if (sal==sala.value){
+        if (sal==salat){
             usersHtml+=`
             <li>
                 <p>               
@@ -99,7 +114,8 @@ const dibujarUsuarios=(usuarios=[])=>{
 }
 
 const dibujarMensajes=(mensajes=[])=>{
-    var salaF  = sala.value;
+    console.log('estoy en dibujar mensajes ')
+    var salaF  = salat //sala.value;
     let mensajesHtml=`<p>Sala ${salaF} </p>`;
     mensajes.forEach(({nombre,mensaje,sala})=>{
         //console.log('salaF ',salaF);
@@ -117,8 +133,8 @@ const dibujarMensajes=(mensajes=[])=>{
             </li>
             `
             ulMensajes.innerHTML=mensajesHtml
-        }else{            
-            ulMensajes.innerHTML=''
+        }else{           
+            
         }
 
         
@@ -130,7 +146,7 @@ const dibujarMensajes=(mensajes=[])=>{
 txtMensaje.addEventListener('keyup',({keyCode})=>{
     const mensaje  = txtMensaje.value;
     const uid      = txtUid.value
-    var salat  = sala.value;
+    //var salat  = sala.value;
     if(keyCode !=13){return;} //13 corresponde al enter
     if(mensaje.length===0){return;}
     //Emito all backend, paso el mensaje y mi id

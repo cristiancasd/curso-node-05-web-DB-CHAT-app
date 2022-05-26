@@ -2,10 +2,10 @@
 
 const miFormulario = document.querySelector('form'); //Formulario html
 
-const enlace='/api/auth/'      
+const enlace='/api/auth/'       
 
 miFormulario.addEventListener('submit', ev=>{
-    ev.preventDefault();//permite cancelar el evento sin detener el funcionamiento
+    ev.preventDefault();//Que en el submit no se recargue la pagina
     const formData={};
 
     //Creo un arreglo con los elementos del formulario

@@ -5,7 +5,7 @@ const Usuario = require('../models/usuario');
 
 const validarJWT= async (req,res,next)=>{
     const token=req.header('c-token');
-    console.log('token: ',token);
+    //console.log('token: ',token);
 
     if(!token){
          return res.status(401).json({
@@ -13,15 +13,15 @@ const validarJWT= async (req,res,next)=>{
          });
     }
     try{ 
-        console.log('Estoy en el try validar-jwt.js');     
+        //console.log('Estoy en el try validar-jwt.js');     
         //en el payload del token está el uid del usuairo, vamos a extraerlo
         const {uid}= jwt.verify(token,process.env.SECRETOPRIVATEKEY); //Verificar jwt correcto
 
-        console.log('uid ......',uid);
+        //console.log('uid ......',uid);
         const usuario=await Usuario.findById(uid);
         
-        console.log('usuario'.red,usuario)
-        console.log('estado del usuario'.red,usuario.estado)
+        //console.log('usuario'.red,usuario)
+        //console.log('estado del usuario'.red,usuario.estado)
         
         if(!usuario){ // validar si el usuario existe, no solo es false, es que no esté en la base de datos
             return res.status(401).json({

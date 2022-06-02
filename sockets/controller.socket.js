@@ -17,33 +17,7 @@ const socketController=async (socket=new Socket())=>{
         return socket.disconnect(); 
     }
 
-    //Cuando defino una sala
-    /*socket.on('user-sala',({salat})=>{ 
-
-        if(salat!='') socket.join(salat)
-        
-        //Cambio la sala donde está conectado el usuario en el objeto Usuario
-        chatMensajes.conectarUsuario({usuario,salat});
-        socket.emit('usuarios-activos',chatMensajes.usuariosArr)//Emito usuarios conectados a sala
-        socket.broadcast.emit('usuarios-activos',chatMensajes.usuariosArr)
-        
-        try{//Emito los ultimos 10 mensajes de la sala
-            if(salat==''){
-                socket.emit('recibir-mensajes',chatMensajes.ultimos10)  //emito nuevo arreglo con el mensaje
-            }else{      
-                if(chatMensajes.ultimos10Sala[salat] ){
-                    socket.emit('recibir-mensajes',chatMensajes.ultimos10Sala[salat])  //emito nuevo arreglo con el mensaje
-                }else{
-                    socket.emit('recibir-mensajes',[{nombre:'',mensaje:'',sala:''}])  //emito nuevo arreglo con el mensaje
-                }                
-            }
-
-        }catch(err){ //Si no hay mensajes previos
-            socket.emit('recibir-mensajes',[])  //emito nuevo arreglo con el mensaje
-            //socket.broadcast.emit('recibir-mensajes',[{nombre:'',mensaje:'',sala:''}])
-        }       
-
-    })*/
+    
 
     
     //Agregar el usuario conectado
@@ -52,7 +26,7 @@ const socketController=async (socket=new Socket())=>{
     //conectarlo a una sala especial
     socket.join(usuario.id) //Es una sala independiente, cada usuario va a tener la sala global y una privada con su id
     
-    //Creo sala si existe
+    //Creo sala
     if(salat!=''){
         console.log('Condicional, estoy en sala',salat)
         socket.join(salat)        
@@ -81,12 +55,11 @@ const socketController=async (socket=new Socket())=>{
         socket.emit('recibir-mensajes', chatMensajes.ultimos10)//Emito arrelgo de chats
     }
      
-
-    
     //Recibir mensaje y enviarlo a todos o privado
     socket.on('enviar-mensaje',({uid ,mensaje,salat})=>{
         if(uid){    // Es un mensaje privado
-            socket.to(uid).emit('mensaje-privado',{de: usuario.nombre, mensaje})
+            //socket.to(uid).emit('mensaje-privado',{de: usuario.nombre, mensaje})
+            socket.to(uid).emit('mensaje-privado',{usuario, mensaje})
 
         }else{
             
@@ -94,9 +67,9 @@ const socketController=async (socket=new Socket())=>{
             console.log('la sala en enviar mensaje es ', salat)
             if(salat==''){ //Sala General
                 socket.emit('recibir-mensajes',chatMensajes.ultimos10)  //emito nuevo arreglo con el mensaje
-                socket.broadcast.to(salat).emit('recibir-mensajes',chatMensajes.ultimos10)
+                //socket.broadcast.to(salat).emit('recibir-mensajes',chatMensajes.ultimos10)
+                socket.broadcast.emit('recibir-mensajes',chatMensajes.ultimos10)
             }else{ // Es una sala diferente
-                console.log('Em el else ', salat)
                 socket.broadcast.to(salat).emit('recibir-mensajes',chatMensajes.ultimos10Sala[salat])  //emito nuevo arreglo con el mensaje
                 socket.emit('recibir-mensajes',chatMensajes.ultimos10Sala[salat])  //emito nuevo arreglo con el mensaje
             }

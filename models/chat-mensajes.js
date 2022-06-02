@@ -14,7 +14,6 @@ class ChatMensajes{
         this.mensajes = [];
         this.usuarios = {};
         this.salas = {};  
-
     }
 
     get ultimos10(){ //Se usa cargar los chats

@@ -4,35 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat</title>
+    <title>Chat Privado</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
 </head>
 <body class="container">
    
-    <input id="fileupload" type="file" name="fileupload" />     
-    <button id="upload-button" onclick="uploadFile()"> Subir Archivo</button>
-
-    <div class="row mt-5">
-        <div class="col-sm-6">
-            <h2>Elegir sala</h2>
-            <hr>
-            <br>
-            <form action="chat.html" class="d-grid">
-                <input 
-                id="sala" 
-                type="text" 
-                name="salaCHAT" 
-                class="form-control mb-2" 
-                placeholder="Sala" 
-                >
-                <button   id="irSala" type="submit" class = "btn btn-primary">
-                    Ir a sala
-                </button>
-            </form>
-            </div>
-        </div>
-    </div>
+    
 
     <div class="row mt-5">
         <div class="col-sm-6">
@@ -67,12 +45,9 @@
         </div>
     </div>
 
-    <button id ="btnSalir"  onclick="salir()" class="btn btn-outline-danger">
+    <button id ="btnSalir" class="btn btn-outline-danger">
         Logout
     </button>
-    <a id ="editarPerfil"  href="editarperfil.html" class="btn btn-primary"  target="_blank">
-        Editar Perfil
-    </a>
 
     <div class="row mt-5">
         <div class="col-sm-6">
@@ -86,7 +61,7 @@
     </div>
 
     <script src="./socket.io/socket.io.js"></script> 
-    <script src="./js/chat.js"></script> 
+    <script src="./js/privado.js"></script> 
 
 </body>
 </html>

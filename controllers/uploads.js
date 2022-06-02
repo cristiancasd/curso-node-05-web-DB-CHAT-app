@@ -173,10 +173,48 @@ const actualizarImagenCloudinary= async (req,res=response)=>{
   res.json(modelo);           //Presento el modelo completo con la img actualizada
 }
 
+const mostrarImagenCloudinary= async (req, res=response)=>{
+  const {id, coleccion} = req.params;   //Obtengo el id y la colección ya validadas
+  
+  let modelo;
+
+  switch(coleccion){
+    case 'usuarios':
+      modelo = await usuario.findById(id);
+      if(!modelo){
+        return res.status(400).json({
+          msg:`No existe un usuario con el id ${id}`
+        });
+      }
+      break; 
+      case 'productos':
+      modelo = await producto.findById(id);
+      if(!modelo){
+        return res.status(400).json({
+          msg:`No existe un producto con el id ${id}`
+        });
+      }
+      break;
+    default:
+      return res.status(500).json({msg:'Se me olvidó validar esto'});
+  }
+
+  //Modelo ya importado. Si existe imagen la envío 
+    if(modelo.img){ //hay una imagen en mi base de datos    
+      console.log('modelo imaganen Cloudinary',modelo.img)       
+      res.json(modelo.img);  
+    }
+
+    //retornar una imagen diciendo que no se encontró imagen
+    let pathImagen = path.join( __dirname, '../assets/', 'goku.png'); 
+    return res.sendFile(pathImagen)
+}
+
 
 module.exports={
     cargarArchivo,
     actualizarImagen,
     mostrarImagen,
-    actualizarImagenCloudinary
+    actualizarImagenCloudinary,
+    mostrarImagenCloudinary
 }

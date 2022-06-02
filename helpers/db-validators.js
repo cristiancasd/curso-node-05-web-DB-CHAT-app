@@ -136,6 +136,7 @@ const existeProductoPorID=async(id)=>{
 }
 
 const coleccionesPermitidas=(coleccion='',colecciones=[])=>{
+  console.log('estoy en coleccionesPermitidas')
   const incluida = colecciones.includes(coleccion);
   if(!incluida){
     throw new Error(`La coleccion ${coleccion} no es permitida, ${colecciones}`)

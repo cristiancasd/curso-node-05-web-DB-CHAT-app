@@ -1,8 +1,9 @@
 require('express-validator')
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { cargarArchivo, actualizarImagen, mostrarImagen, actualizarImagenCloudinary } = require('../controllers/uploads');
-const { validarCampos } =         require('../middlewares');
+const { cargarArchivo, actualizarImagen, mostrarImagen, actualizarImagenCloudinary, mostrarImagenCloudinary } = require('../controllers/uploads');
+const  {validarCampos}  =         require('../middlewares/validar-campos');
+//const { validarCampos } =         require('../middlewares');
 const { validarArchivoSubir } =   require('../middlewares/validar-archivo');
 const { coleccionesPermitidas } = require('../helpers/db-validators');
 
@@ -26,6 +27,9 @@ router.get('/:coleccion/:id',[                                //Obtener la imagÃ
     check('coleccion').custom(
         c=>coleccionesPermitidas(c,['usuarios','productos'])),
     validarCampos
-],mostrarImagen)                                             
+],mostrarImagenCloudinary)
+//],mostrarImagen)     
+
+//mostrarImagenCloudinary
 
 module.exports= router;

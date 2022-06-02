@@ -3,7 +3,7 @@
 let usuario = null;
 let socket  = null;
 
-//Traigo los elementos del CHAT html
+//Traigo los elementos del html
 const fileupload = document.querySelector('#fileupload');
 const sala       = document.querySelector('#sala');
 const txtUid     = document.querySelector('#txtUid');
@@ -14,7 +14,11 @@ const ulMensajesPriv = document.querySelector('#ulMensajesPriv');
 const irSala   = document.querySelector('#irSala');
 const btnSalir   = document.querySelector('#btnSalir');
 
-
+//Traigo los elementos del erditarPerfil html
+const fotoUser = document.querySelector('#fotoUser');
+const nombreUser       = document.querySelector('#nombreUser');
+const correoUser     = document.querySelector('#correoUser');
+const contrasenaUser = document.querySelector('#contrasenaUser');
 
 
 
@@ -62,37 +66,11 @@ const validarJWT = async() => {
     await conectarSocket()
 } 
 
-const conectarSocket = async()=>{
-
-    socket=io({
-        'extraHeaders':{//enviamos headers adicionales para esta conexión
-            'c-token': localStorage.getItem('token'),
-            'salat':salat
-        }
-    });
-
-    socket.on('connect',()=>{console.log('sockets online')})
-    socket.on('disconnect',()=>{console.log('sockets disconnect')});
-
-    //Recibo el backend emite un arreglo con los ultimos mensajes del chat
-    socket.on('recibir-mensajes',(payload)=>{
-        dibujarMensajes(payload)//Los muestro en el front
-    })
-
-    //Mostrar en el front los usuarios conectados al chat
-    socket.on('usuarios-activos',(payload)=>{
-        dibujarUsuarios(payload)//Los muestro en el front
-    })
-
-    socket.on('mensaje-privado',(payload)=>{
-        dibujarMensajesPriv(payload)//Los muestro en el front
-    }) 
-
-}
 
 
-async function uploadFile() {
-    console.log('estoy en uploadFile')    
+
+async function uploadFileP() {
+    
     //creating form data object and append file into that form data
     let formData = new FormData(); 
     console.log('fileupload.files[0]', fileupload.files[0])
@@ -119,84 +97,10 @@ async function uploadFile() {
 
 }
 
-//Petición Fetch
-function obtenerIMG ({usuario}) {
-    return new Promise((resolve,reject)=>{
-        fetch(enlaceSubir+usuario.uid,{
-            method: 'GET',
-            headers:{'Content-Type':'application/json'}
-        })
-        .then(response => response.blob())
-        .then(imageBlob => {
-            // Then create a local URL for that image and print it 
-            const imageObjectURL = URL.createObjectURL(imageBlob);
-
-            if(imageBlob){
-                
-                console.log('=========',imageObjectURL)
-
-                let reader = new FileReader();
-                reader.readAsDataURL(imageBlob); // convierte el blob a base64 y llama a onload
-                console.log('reader A- --- ',reader)
-                
-
-                reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result);
-                reader.readAsDataURL(imageBlob);
-                console.log('reader- --- ',reader)
 
 
-                localStorage.setItem('imgErr',imageObjectURL);
-                return imageObjectURL
-            }
-            reject("Llorelo"+response.status)
-
-        })
-        .then((imageObjectURL)=> resolve(imageObjectURL)) 
-        .catch((err) => reject(err));           
-    })
-}
 
 
-const  dibujarUsuarios=async(usuarios=[])=>{
-    let usersHtml='';
-    //usuarios.forEach(({nombre,uid})=>{
-        await usuarios.forEach(({usuario,salat:sal})=>{
-        
-        let imgPerfil=''
-        if(usuario.img){
-
-            imgPerfil=usuario.img
-            
-        
-        }else{           
-            console.log('voy a traer la imagen de ', enlaceSubir + usuario.uid)
-            //Obtener la imagen por medio de un GET al servidor         
-            //obtenerIMG({usuario})
-            imgPerfil='/js/goku.png'
-        } 
-
-        console.log('la imagen de ',usuario.nombre,' es ',imgPerfil)
-        
-        //if (sal==sala.value){
-        if (sal==salat){
-            usersHtml+=`
-            <img src="${imgPerfil}" width="40" height="40> 
-            <li>
-                <p>       
-                    <a href=""></a>               
-                    <a href="javascript:irPrivado('${usuario.uid}')" class="text-success">${usuario.nombre}</a>                   
-                    
-                    <span class="fs-6 text-muted">  ${usuario.uid}</span>
-                    <span class="fs-6 text-muted">${sal}</span>
-                </p>
-            </li>
-            `
-            ulUsuarios.innerHTML=usersHtml
-        }
-            
-    })
-}
 
 const dibujarMensajes=(mensajes=[])=>{
     console.log('estoy en dibujar mensajes ')

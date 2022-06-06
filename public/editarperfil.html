@@ -8,51 +8,67 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
 </head>
-<body class="container">
+<body class="container" >
    
 
 
-    <div class="row mt-5">
-        <div class="col-sm-6">
+    <div class="row mt-5 " style="justify-content: center">
+        <div class="col-sm-6" style="justify-content: center">
+            
+            <form   class="d-grid" >
+                <a href="chat.html" class="btn btn-primary">
+                    Volver al Chat
+                </a>            
+            </form>
 
-            <form action="chat.html" class="d-grid">
-                <img id="FotoUser" src='/js/goku.png' width="300" height="300">
+
+            <form  id='formSubirImagen' class="d-grid" style="justify-content: center"> 
 
                 <hr>
-                <h2>Cambiar Foto de Perfil</h2>
-                <input id="fileupload" type="file" name="fileupload" />    
-                <button id="upload-button" onclick="uploadFileP()" class = "btn btn-primary"> Cambiar Foto</button>
+                <h3>Cambiar Foto de Perfil</h3>
+
+                <img id="fotoUser" src='' width="300" height="300">
+                <br>
+                <input id="fileupload" type="file" name="fileupload" />  
+                <br>  
+                <button id="upload_button"  type="submit" class = "btn btn-primary"> Cambiar Foto</button>
             </form>
             <br>
-            <br>
-            <br>
+            
+            
 
-            <h2>Cambiar datos Personales</h2>
-            <hr>
+            <form  id='formCambiarDatos' class="d-grid" style="justify-content: center">
+            <hr>            
+            <h3>Cambiar datos Personales</h3>
+            
             <br>
-            <form action="chat.html" class="d-grid">
                 <input 
-                id="nombreUser" 
+                id="nombre" 
                 type="text" 
-                name="salaCHAT" 
+                name="nombre" 
                 class="form-control mb-2" 
                 placeholder="Nombre" 
-                >
+                required>
+                
                 <input 
-                id="correoUser" 
-                type="text" 
-                name="salaCHAT" 
+                id="password" 
+                type="password" 
+                name="password" 
                 class="form-control mb-2" 
-                placeholder="Correo" 
-                >
+                placeholder="contraseña" 
+                required>
+
                 <input 
-                id="sala" 
-                type="ContrasenaUser" 
-                name="salaCHAT" 
+                id="password2" 
+                type="password" 
+                name="password2" 
                 class="form-control mb-2" 
-                placeholder="**********" 
-                >
-                <button   id="irSala" type="submit" class = "btn btn-primary">
+                placeholder="confirme Contraseña" 
+                required>
+
+
+
+                <button   id="change_button" type="submit" class = "btn btn-primary">
                     Editar Perfil
                 </button>
             </form>
@@ -60,9 +76,6 @@
         </div>
     </div>
 
-   
-
-    <script src="./socket.io/socket.io.js"></script> 
     <script src="./js/editarperfil.js"></script> 
 
 </body>

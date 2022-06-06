@@ -4,7 +4,6 @@ let usuario = null;
 let socket  = null;
 
 //Traigo los elementos del CHAT html
-const fileupload = document.querySelector('#fileupload');
 const sala       = document.querySelector('#sala');
 const txtUid     = document.querySelector('#txtUid');
 const txtmensaje = document.querySelector('#txtmensaje');
@@ -15,11 +14,13 @@ const irSala   = document.querySelector('#irSala');
 const btnSalir   = document.querySelector('#btnSalir');
 
 
+const titulo_chat   = document.querySelector('#titulo_chat');
 
+
+let myId='';
 
 
 const enlace='/api/auth/' 
-const enlaceSubir='/api/uploads/usuarios' 
 const enlaceAssets="../../assets/goku.png"
 let privado = 'no'
 //Leer los parametros del URL
@@ -29,11 +30,18 @@ let salat='';
 if (!searchParams.has('salaCHAT')){
     
     salat='';
+    titulo_chat.innerHTML='Chat Sala General '
 }else{
     salat=searchParams.get('salaCHAT');
+
+    (salat=='')
+        ? titulo_chat.innerHTML='Chat Sala General '
+        : titulo_chat.innerHTML='Chat en Sala '+salat
 }
 
-console.log('salat es B',salat)
+
+
+console.log('salat es ',salat)
 
 
 
@@ -58,6 +66,7 @@ const validarJWT = async() => {
     const {usuario: userDb, token:tokenDB}= await resp.json(); 
     localStorage.setItem('token',tokenDB) //Renuevo el JWT
     usuario=userDb;
+    myId=usuario.uid;
     document.title = usuario.nombre; //El texto de la pestaña de chat.html
     await conectarSocket()
 } 
@@ -91,33 +100,7 @@ const conectarSocket = async()=>{
 }
 
 
-async function uploadFile() {
-    console.log('estoy en uploadFile')    
-    //creating form data object and append file into that form data
-    let formData = new FormData(); 
-    console.log('fileupload.files[0]', fileupload.files[0])
-   
-    formData.append("accountnum", 123456);
-    formData.append('archivo', fileupload.files[0]);
-    formData.append("username", "Groucho");
-    
-    for (var pair of formData.entries()) {
-        console.log(pair[0]+ ', ' + pair[1]); 
-    }
 
-    await fetch(enlaceSubir+'/'+usuario.uid, { 
-        method: "PUT", 
-        //body: JSON.stringify(formData),
-        body: formData//,
-        //headers:{'Content-Type':'application/json'}        
-    })
-    
-    .then(response => response.json())
-    .catch(error =>  console.warn(error))
-    .then(response => console.log('Success:', response));   
-    location.reload();
-
-}
 
 //Petición Fetch
 function obtenerIMG ({usuario}) {
@@ -133,17 +116,14 @@ function obtenerIMG ({usuario}) {
 
             if(imageBlob){
                 
-                console.log('=========',imageObjectURL)
 
                 let reader = new FileReader();
                 reader.readAsDataURL(imageBlob); // convierte el blob a base64 y llama a onload
-                console.log('reader A- --- ',reader)
                 
 
                 reader = new FileReader();
                 reader.onloadend = () => resolve(reader.result);
                 reader.readAsDataURL(imageBlob);
-                console.log('reader- --- ',reader)
 
 
                 localStorage.setItem('imgErr',imageObjectURL);
@@ -170,7 +150,7 @@ const  dibujarUsuarios=async(usuarios=[])=>{
             
         
         }else{           
-            console.log('voy a traer la imagen de ', enlaceSubir + usuario.uid)
+            //console.log('voy a traer la imagen de ', enlaceSubir + usuario.uid)
             //Obtener la imagen por medio de un GET al servidor         
             //obtenerIMG({usuario})
             imgPerfil='/js/goku.png'
@@ -180,26 +160,41 @@ const  dibujarUsuarios=async(usuarios=[])=>{
         
         //if (sal==sala.value){
         if (sal==salat){
-            usersHtml+=`
-            <img src="${imgPerfil}" width="40" height="40> 
-            <li>
-                <p>       
-                    <a href=""></a>               
-                    <a href="javascript:irPrivado('${usuario.uid}')" class="text-success">${usuario.nombre}</a>                   
-                    
-                    <span class="fs-6 text-muted">  ${usuario.uid}</span>
-                    <span class="fs-6 text-muted">${sal}</span>
-                </p>
-            </li>
-            `
+
+            if(myId!=usuario.uid){
+                usersHtml+=`
+                <img src="${imgPerfil}" width="40" height="40> 
+                <li>
+                    <p>       
+                        <a href=""></a>               
+                        <a href="javascript:irPrivado('${usuario.uid}')" class="text-success">${usuario.nombre}</a>                   
+                        
+                        <span class="fs-6 text-muted">  ${usuario.uid}</span>
+                        <span class="fs-6 text-muted">${sal}</span>
+                    </p>
+                </li>
+                `
+            }else{
+                usersHtml+=`
+                <img src="${imgPerfil}" width="40" height="40> 
+                <li>
+                    <p>       
+                                     
+                        <span  class="text-success"> Yo: ${usuario.nombre}</span>                   
+                        <span class="fs-6 text-muted">${sal}</span>
+                    </p>
+                </li>
+                `
+            }
+                
             ulUsuarios.innerHTML=usersHtml
+       
         }
             
     })
 }
 
 const dibujarMensajes=(mensajes=[])=>{
-    console.log('estoy en dibujar mensajes ')
     var salaF  = salat //sala.value;
     let mensajesHtml=`<p>Sala ${salaF} </p>`;
     mensajes.forEach(({nombre,mensaje,sala})=>{
@@ -228,7 +223,6 @@ const dibujarMensajes=(mensajes=[])=>{
 let arreglo_priv=[]
 let cont_priv=0
 const dibujarMensajesPriv=({usuario:user,mensaje:mens})=>{
-    console.log('estoy en dibujar mensajes Privados')   
     //console.log('usuario ',usuario)  
     //console.log('mensaje ',mensaje)  
     
@@ -244,7 +238,6 @@ const dibujarMensajesPriv=({usuario:user,mensaje:mens})=>{
     }
 
 
-    console.log('arreglo_priv',arreglo_priv)
 
     let mensajesHtml=`<p> Mensajes Privados </p>`;
 
@@ -291,7 +284,6 @@ const irPrivado=(id)=>{
 
 
 const salir=()=>{
-    console.log('estoy en salir')
     localStorage.clear(); //borro el token                                         
     location.reload();//Reecargo la página
 }

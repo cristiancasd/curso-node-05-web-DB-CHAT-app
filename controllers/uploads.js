@@ -121,16 +121,16 @@ const actualizarImagenCloudinary= async (req,res=response)=>{
   console.log('estoy en actualizaImagenCloudinary');
   // La validación de que exista un archivo lo hago en el middleware
   const {id, coleccion} = req.params;  //obtengo el id y colección ya validados  
-  console.log('id es ... ',id);
-  console.log('coleccion es ... ',coleccion);
+  //console.log('id es ... ',id);
+  //console.log('coleccion es ... ',coleccion);
 
   let modelo;
 
   switch(coleccion){
     case 'usuarios':
-      console.log('estoy en usuarios');
+      //console.log('estoy en usuarios');
       modelo = await usuario.findById(id);  //Traigo el modelo de usuario completo
-      console.log('modelo .... ',modelo);
+      //console.log('modelo .... ',modelo);
       if(!modelo){                          //Si nohay modelo retorno mensaje
         return res.status(400).json({
           msg:`No existe un usuario con el id ${id}`
@@ -138,9 +138,9 @@ const actualizarImagenCloudinary= async (req,res=response)=>{
       }
       break;      
       case 'productos':
-        console.log('estoy en productos');
+        //console.log('estoy en productos');
       modelo = await producto.findById(id);   //Traigo el modelo de productos completo
-      console.log('modelo .... ',modelo);
+      //console.log('modelo .... ',modelo);
       if(!modelo){                            //Si nohay modelo retorno mensaje
         return res.status(400).json({
           msg:`No existe un producto con el id ${id}`
@@ -153,21 +153,21 @@ const actualizarImagenCloudinary= async (req,res=response)=>{
 
   //Si existe modelo, vamos a Limpiar imagenes previas
   if(modelo.img){ //hay una imagen en mi base de datos 
-    console.log('hay imagen ...',modelo.img)    
+    //console.log('hay imagen ...',modelo.img)    
     const nombreArr=modelo.img.split('/');
     const nombre=nombreArr[nombreArr.length-1];
     const [public_id] = nombre.split('.');
-    console.log('public_id ...',public_id)
+    //console.log('public_id ...',public_id)
     cloudinary.uploader.destroy(public_id);
-    console.log('cloudinary.uploader.destroy(public_id) es OK')
+    //console.log('cloudinary.uploader.destroy(public_id) es OK')
   }
 
   const{tempFilePath}=req.files.archivo
-  console.log('voy a subir archivo')
+  //console.log('voy a subir archivo')
   const {secure_url} = await cloudinary.uploader.upload(tempFilePath)
-  console.log('ya subí archivo')
+  //console.log('ya subí archivo')
   modelo.img=secure_url;
-  console.log('modelo.img..',modelo.img)
+  //console.log('modelo.img..',modelo.img)
   await modelo.save();  
   console.log('Salvo modelo')
   res.json(modelo);           //Presento el modelo completo con la img actualizada

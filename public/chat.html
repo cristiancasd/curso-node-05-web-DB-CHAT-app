@@ -10,15 +10,12 @@
 </head>
 <body class="container">
    
-    <input id="fileupload" type="file" name="fileupload" />     
-    <button id="upload-button" onclick="uploadFile()"> Subir Archivo</button>
-
-    <div class="row mt-5">
-        <div class="col-sm-6">
-            <h2>Elegir sala</h2>
-            <hr>
-            <br>
-            <form action="chat.html" class="d-grid">
+  
+    <div class="row mt-5" style="justify-content: center">
+        <div class="col-sm-6" style="justify-content: center">
+            <form action="chat.html" class="d-grid" style="justify-content: center">
+                <h2>Elegir sala</h2>
+                <hr>
                 <input 
                 id="sala" 
                 type="text" 
@@ -30,9 +27,18 @@
                     Ir a sala
                 </button>
             </form>
-            </div>
         </div>
+
+        <div class="col-sm-6" style="justify-content: center">
+            <h3>Usuarios</h3>
+            <hr>
+            <ul id="ulUsuarios"> 
+            </ul>
+        </div>
+
     </div>
+    
+
 
     <div class="row mt-5">
         <div class="col-sm-6">
@@ -42,7 +48,8 @@
                 id="txtUid"
                 class="form-control mb-2"
                 placeholder="uid"
-                autocomplete="off">
+                autocomplete="off"
+                >
             
             <input type="text"
                 id="txtMensaje"
@@ -51,26 +58,27 @@
                 autocomplete="off"
                 required>
 
-            <h3>Usuarios</h3>
-            <hr>
-            <ul id="ulUsuarios"> 
-            </ul>
+            
         </div>
 
         <div class="col-sm-6">
-            <h3>Chat completo</h3>
+            <h3 id="titulo_chat">Chat completo</h3>
             <hr>
             <ul id="ulMensajes">
 
             </ul>
 
         </div>
+
+        
+
+
     </div>
 
     <button id ="btnSalir"  onclick="salir()" class="btn btn-outline-danger">
         Logout
     </button>
-    <a id ="editarPerfil"  href="editarperfil.html" class="btn btn-primary"  target="_blank">
+    <a id ="editarPerfil"  href="editarperfil.html" class="btn btn-primary" >
         Editar Perfil
     </a>
 

@@ -9,7 +9,7 @@ require('colors')
 // ObtenerCategorias - paginado - total -poputale
 const ObtenerCategorias=async (req, res=response) => {
 
-    const {limite=5, desde=0}=req.query;
+    const {limite=115, desde=0}=req.query;
     
     const query={estado:true};
     

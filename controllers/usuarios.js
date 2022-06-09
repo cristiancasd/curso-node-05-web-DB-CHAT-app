@@ -8,7 +8,7 @@ require('colors')
 
 const usuariosGet = async (req, res) =>{
     
-    const{limite=5, desde=0}=req.query;                   //recibo los parametros en el enlace
+    const{limite=5000, desde=0}=req.query;                   //recibo los parametros en el enlace
     
     /*
     const usuarios = await Usuario.find({estado:true}) //La condición retorna solo los que esten en true
@@ -35,7 +35,7 @@ const usuariosPut =  async (req, res) =>{
                                                               
     const {id}=req.params;                                  //http://localhost:8080/api/usuarios/12  //id va a ser 12 
         
-    const {_id,password, google,correo, ...resto}=req.body; //no podemos recibir _id nuevo ya que este no se puede actualizar, resto no contiene los datos ahí establecidos                                                           
+    const {_id, password, google,correo, ...resto}=req.body; //no podemos recibir _id nuevo ya que este no se puede actualizar, resto no contiene los datos ahí establecidos                                                           
     
     if (password){                                          //Encriptar contraseña       
         const salt = bcryptjs.genSaltSync();

@@ -176,7 +176,7 @@ const  dibujarUsuarios=async(usuarios=[])=>{
                 `
             }else{
                 usersHtml+=`
-                <img src="${imgPerfil}" width="40" height="40> 
+                <img src="${imgPerfil}" width="40" height="40"> 
                 <li>
                     <p>       
                                      
@@ -276,10 +276,6 @@ const irPrivado=(id)=>{
     //console.log('el id es', id)
     //var edad = prompt('Cuantos años tienes?', '100');
 }
-
-
-
-
 
 
 

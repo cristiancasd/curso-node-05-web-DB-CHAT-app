@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+</head>
+<body class="container" >
+
+    <!-- Seleccionar Funcion -->
+    <div class="row mt-5 " style="justify-content: center">
+        <div class="col-sm-6" style="justify-content: center">
+
+
+            <form   class="d-grid" >
+                <a href="index.html" class="btn btn-outline-danger">
+                    Volver al Index
+                </a> 
+                <hr>           
+            </form>
+            <br> 
+
+            <form   id='formFuncion' class="d-grid" >
+               
+
+                <select class="selectpicker" id="seleccion" >
+                    <optgroup label="Usuarios">
+                      <option value="nuevoUser" >         Nuevo Usuario  </option>
+                      <option value="editarUser" >        Editar Usuario </option>
+                      <option value="verUser">            Ver Usuario </option>
+                      <option value="eliminarUser">       Eliminar Usuario </option>
+                    </optgroup>
+
+                    <optgroup label="Categorias">
+                        <option value="nuevaCateg">       Nueva Categoría  </option>
+                        <option value="verCateg" >          Ver Categoría  </option>
+                        
+                      </optgroup>
+
+                    <optgroup label="Productos">
+                      <option value="nuevoProd">          Nuevo Producto  </option>
+                      <option value="editarProd" >        Editar Producto </option>
+                      <option value="verCateg">            Ver Producto </option>
+                      <option value="eliminarProd">       Eliminar Producto </option>
+                    </optgroup>                 
+                </select>
+
+                <input 
+                id="id_user" 
+                type="text" 
+                name="id_user" 
+                class="form-control mb-2" 
+                placeholder="Escribir ID" 
+                >
+
+                <button id="selectButton"  type="submit" class = "btn btn-primary">Escoger Funcion</button>
+               
+            </form>
+
+            <h4 id="estoyEn">Estoy en: </h4>
+        </div>
+    </div>
+
+    <!-- Crear y editar Usuarios-->
+    <div class="row mt-5 " style="justify-content: center">
+        <div class="col-sm-6" style="justify-content: center">
+            
+            
+        
+            <div id="divFormImg">
+                <form  id='formSubirImagen' class="d-grid" style="justify-content: center; " > 
+
+                    <hr>
+                    <h4 >Cambiar Foto</h4>
+
+                    <img id="fotoUser" src='' width="300" height="300">
+                    <br>
+                    <input id="fileupload" type="file" name="fileupload" />  
+                    <br>  
+                    <button id="upload_button"  type="submit" class = "btn btn-primary"> Cambiar Foto</button>
+                </form>
+                <br>
+            </div>
+            
+            <div id="divFormDatos">
+                <form  id='formCambiarDatos' class="d-grid" style="justify-content: center; ">
+                <hr>            
+                <h3>Cambiar datos Personales</h3>
+                
+                <br>
+                    <label>Nombre</label>
+                    <input 
+                    id="nombre" 
+                    type="text" 
+                    name="nombre" 
+                    class="form-control mb-2" 
+                    placeholder="Nombre" 
+                    required>
+                    <br>
+                    
+                    <label>Correo</label>
+                    <input 
+                    id="correo" 
+                    type="email" 
+                    name="correo" 
+                    class="form-control mb-2" 
+                    placeholder="correo" 
+                    required>
+                    <br>
+                            
+                    <label><input type="checkbox" id="usarContraseña" value="SI"></label>
+
+                    <label>Contraseña</label>
+                    <input 
+                    id="password" 
+                    type="password" 
+                    name="password" 
+                    class="form-control mb-2" 
+                    placeholder="contraseña" 
+                    required>
+                    <label>Confirmar Contraseña</label>
+                    <input 
+                    id="password2" 
+                    type="password" 
+                    name="password2" 
+                    class="form-control mb-2" 
+                    placeholder="confirme Contraseña" 
+                    required>
+                    <br>
+                    <select class="selectpicker" id="rol" >
+                        
+                        <option value="ADMIN_ROLE" >   ROL ADMIN  </option>
+                        <option value="USER_ROLE" >    ROL USUARIO </option>
+                        <option value="VENTAS_ROL">    ROL VENTAS </option>
+                        
+                    </select>
+
+                    <select class="selectpicker" id="estado" >
+                        
+                        <option value=true  >  estado True  </option>
+                        <option value=false >  estado False </option>
+                        
+                    </select>           
+
+
+
+                    <button   id="change_button" type="submit" class = "btn btn-primary">
+                        Editar Perfil
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ver usuarios y roles -->
+    <div class="row mt-5" style="justify-content:center" id="divUsuarios">
+        <div class="row mt-5" style="justify-content: center" >
+            <div  style=" background-color: black" >
+                
+                <h2>ROLES</h2>
+                <hr>
+                <br>
+                <ul id="noRoles" style="border:1px solid white;
+                overflow:hidden;
+                text-align: center; "> 
+                </ul>
+                <br>
+                <br>
+                <br>
+                <h2>Usuarios</h2>
+                <hr>
+                <br>
+                <section id="rolUsuarios" 
+                        style="border:1px solid white;
+                               overflow:hidden;
+                               text-align: center; 
+                       " >                     
+                </section>
+                 
+            </div>
+        </div>
+    </div>
+
+    <!-- ver categorias y productos -->
+    <div class="row mt-5" style="justify-content:center" id="divCateProd" >
+        <div class="row mt-5" style="justify-content: center" >
+            <div  style=" background-color: black" >
+                
+                <h2>Categorias</h2>
+                <hr>
+                <br>
+                <ul id="categoriasTodas" style="border:1px solid white;
+                overflow:hidden;
+                text-align: center; "> 
+                    
+                </ul>
+                <br>
+                <br>
+                <br>
+                <h2>Productos</h2>
+                <hr>
+                <br>
+                <section id="cateProductos" 
+                        style="border:1px solid white;
+                               overflow:hidden;
+                               text-align: center; 
+                       " >                     
+                </section>
+                 
+            </div>
+        </div>
+    </div>
+
+    <!-- crear y editar categorias y productos -->
+    <div class="row mt-5 " style="justify-content: center" id="divEditarProductos">
+        <div class="col-sm-6" style="justify-content: center">
+            <div id="divFormImgP">
+                <form  id='formSubirImagenP' class="d-grid" style="justify-content: center; " > 
+
+                    <hr>
+                    <h4 >Cambiar Foto</h4>
+
+                    <img id="fotoUserP" src='' width="300" height="300">
+                    <br>
+                    <input id="fileuploadP" type="file" name="fileupload" />  
+                    <br>  
+                    <button id="upload_buttonP"  type="submit" class = "btn btn-primary"> Cambiar Foto</button>
+                </form>
+                <br>
+            </div>
+            
+            <div id="divFormDatosP">
+                <form  id='formCambiarDatosP' class="d-grid" style="justify-content: center; ">
+                <hr>            
+                <h3>Cambiar datos</h3>
+                
+                <br>
+
+                    <label id="label_nombreProducto">Nombre Producto</label>
+                    <input 
+                    id="nombreProducto" 
+                    type="text" 
+                    name="nombre" 
+                    class="form-control mb-2" 
+                    placeholder="nombre Producto" 
+                    required>
+                    <br>
+
+                    <label>Nombre Categoria</label>
+                    <input 
+                    id="categoria" 
+                    type="text" 
+                    name="categoria" 
+                    class="form-control mb-2" 
+                    placeholder="Categoria" 
+                    required>
+                    <br>
+
+                    <select class="selectpicker" id="estadoCategoria" >                        
+                        <option value=true  >  Categoría True  </option>
+                        <option value=false >  Categoría false </option>                        
+                    </select>  
+                    
+                    <label id="label_precio">Precio</label>
+                    <input 
+                    id="precio" 
+                    type="number" 
+                    name="precio" 
+                    class="form-control mb-2" 
+                    placeholder="Precio" 
+                    required>
+
+                    <label id="label_descripcion">Descrpción</label>
+                    <input 
+                    id="descripcion" 
+                    type="text" 
+                    name="descripcion" 
+                    class="form-control mb-2" 
+                    placeholder="Descripcion" 
+                    required>
+                    <br>
+
+                    <select class="selectpicker" id="disponible" >                        
+                        <option value=true  >  prod. disponible: SI  </option>
+                        <option value=false >  prod. disponible: NO </option>                        
+                    </select>         
+                    <br>
+                    <button   id="change_buttonP" type="submit" class = "btn btn-primary">
+                        Editar
+                    </button>
+                    <br>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="./js/admin.js"></script> 
+
+</body>
+</html>

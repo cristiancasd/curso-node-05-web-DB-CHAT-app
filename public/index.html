@@ -10,6 +10,41 @@
 </head>
 <body class="container">
 
+
+    <div class="row mt-5" style="justify-content:center" >
+        <div class="row mt-5" style="justify-content: center" >
+            <div  style=" background-color: black" >
+                
+                <h2>Categorias</h2>
+                <hr>
+                <br>
+                <ul id="categoriasTodas" style="border:1px solid white;
+                overflow:hidden;
+                text-align: center; "> 
+                    
+                </ul>
+                <br>
+                <br>
+                <br>
+                <h2>Productos</h2>
+                <hr>
+                <br>
+                <section id="cateProductos" 
+                        style="border:1px solid white;
+                               overflow:hidden;
+                               text-align: center; 
+                       " >                     
+                </section>
+                 
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <h5 id="userLog"class="text-success" style="
+        background-color:black; text-decoration-color: beige; text-align: center;
+        ">Autenticacion</h5>
     <div class="row mt-5">
         <div class="col-sm-6">
             <h1>Google Sign in</h1>
@@ -53,6 +88,25 @@
         </div>        
     </div>
     
+    <section style="border:1px solid white;
+                    overflow:hidden;
+                    text-align: center; ">
+        <div class="row mt-5 " style="justify-content: center">
+            <div class="col-sm-6" style="justify-content: center">
+        
+                <form   class="d-grid" >
+                    <a id='user_rol'   href="chat.html"   class="btn btn-outline-danger" style="visibility:hidden;"> Chat </a>       
+                    <a id='ventas_rol' href="ventas.html" class="btn btn-outline-danger" style="visibility:hidden;"> Ventas </a>  
+                    <a id='admin_rol'  href="admin.html"  class="btn btn-outline-danger" style="visibility:hidden;"> Funciones Admin </a>  
+                        
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <br>
+    <br>
+
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="./js/auth.js"></script> 
 

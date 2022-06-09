@@ -137,7 +137,7 @@ const actualizarImagenCloudinary= async (req,res=response)=>{
         });
       }
       break;      
-      case 'productos':
+    case 'productos':
         //console.log('estoy en productos');
       modelo = await producto.findById(id);   //Traigo el modelo de productos completo
       //console.log('modelo .... ',modelo);

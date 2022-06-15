@@ -11,7 +11,7 @@
 <body class="container" >
 
     <!-- Seleccionar Funcion -->
-    <div class="row mt-5 " style="justify-content: center">
+    <div class="row mt-5 " style="justify-content: center; ">
         <div class="col-sm-6" style="justify-content: center">
 
 
@@ -35,8 +35,12 @@
                     </optgroup>
 
                     <optgroup label="Categorias">
-                        <option value="nuevaCateg">       Nueva Categoría  </option>
                         <option value="verCateg" >          Ver Categoría  </option>
+                        <option value="nuevaCateg">       Nueva Categoría  </option>
+                        <option value="editarCateg">       Editar Categoría  </option>
+                        <option value="eliminarCateg">       Eliminar Categoría  </option>
+
+                        
                         
                       </optgroup>
 
@@ -45,7 +49,12 @@
                       <option value="editarProd" >        Editar Producto </option>
                       <option value="verCateg">            Ver Producto </option>
                       <option value="eliminarProd">       Eliminar Producto </option>
-                    </optgroup>                 
+                    </optgroup>     
+                    
+                    <optgroup label="Buscar">
+                        <option value="buscar">          Buscar  </option>                       
+                    </optgroup> 
+
                 </select>
 
                 <input 
@@ -60,37 +69,39 @@
                
             </form>
 
-            <h4 id="estoyEn">Estoy en: </h4>
+            <h4 id="estoyEn"style="text-align: center; ">Estoy en:</h4>
         </div>
     </div>
 
     <!-- Crear y editar Usuarios-->
-    <div class="row mt-5 " style="justify-content: center">
+    <div class="row mt-5 " style="justify-content: center; " >
         <div class="col-sm-6" style="justify-content: center">
             
             
         
-            <div id="divFormImg">
+            <div id="divFormImg" >
                 <form  id='formSubirImagen' class="d-grid" style="justify-content: center; " > 
 
                     <hr>
-                    <h4 >Cambiar Foto</h4>
+                    <h5 >Cambiar Foto</h5>
 
                     <img id="fotoUser" src='' width="300" height="300">
-                    <br>
                     <input id="fileupload" type="file" name="fileupload" />  
-                    <br>  
                     <button id="upload_button"  type="submit" class = "btn btn-primary"> Cambiar Foto</button>
                 </form>
-                <br>
             </div>
             
             <div id="divFormDatos">
                 <form  id='formCambiarDatos' class="d-grid" style="justify-content: center; ">
                 <hr>            
-                <h3>Cambiar datos Personales</h3>
+                <h5>Cambiar datos Personales</h5>
                 
-                <br>
+                    <div id="verDivSelectUsuarios">
+                        <label>Usuarios Actuales</label>
+                        <select class="selectpicker" id="divSelectUsuarios" >                        
+                        </select>   
+                    </div>
+
                     <label>Nombre</label>
                     <input 
                     id="nombre" 
@@ -99,7 +110,6 @@
                     class="form-control mb-2" 
                     placeholder="Nombre" 
                     required>
-                    <br>
                     
                     <label>Correo</label>
                     <input 
@@ -109,7 +119,6 @@
                     class="form-control mb-2" 
                     placeholder="correo" 
                     required>
-                    <br>
                             
                     <label><input type="checkbox" id="usarContraseña" value="SI"></label>
 
@@ -129,7 +138,6 @@
                     class="form-control mb-2" 
                     placeholder="confirme Contraseña" 
                     required>
-                    <br>
                     <select class="selectpicker" id="rol" >
                         
                         <option value="ADMIN_ROLE" >   ROL ADMIN  </option>
@@ -138,11 +146,9 @@
                         
                     </select>
 
-                    <select class="selectpicker" id="estado" >
-                        
+                    <select class="selectpicker" id="estado" >                        
                         <option value=true  >  estado True  </option>
-                        <option value=false >  estado False </option>
-                        
+                        <option value=false >  estado False </option>                        
                     </select>           
 
 
@@ -158,7 +164,7 @@
 
 
     <!-- ver usuarios y roles -->
-    <div class="row mt-5" style="justify-content:center" id="divUsuarios">
+    <div class="row mt-5" style="justify-content:center;" id="divUsuarios">
         <div class="row mt-5" style="justify-content: center" >
             <div  style=" background-color: black" >
                 
@@ -187,7 +193,7 @@
     </div>
 
     <!-- ver categorias y productos -->
-    <div class="row mt-5" style="justify-content:center" id="divCateProd" >
+    <div class="row mt-5" style="justify-content:center;" id="divCateProd" >
         <div class="row mt-5" style="justify-content: center" >
             <div  style=" background-color: black" >
                 
@@ -217,13 +223,13 @@
     </div>
 
     <!-- crear y editar categorias y productos -->
-    <div class="row mt-5 " style="justify-content: center" id="divEditarProductos">
-        <div class="col-sm-6" style="justify-content: center">
+    <div class="row mt-5 " style="justify-content: center;" >
+        <div class="col-sm-6" style="justify-content: center"id="divEditarProductos">
             <div id="divFormImgP">
                 <form  id='formSubirImagenP' class="d-grid" style="justify-content: center; " > 
 
                     <hr>
-                    <h4 >Cambiar Foto</h4>
+                    <h5 >Cambiar Foto</h5>
 
                     <img id="fotoUserP" src='' width="300" height="300">
                     <br>
@@ -231,25 +237,29 @@
                     <br>  
                     <button id="upload_buttonP"  type="submit" class = "btn btn-primary"> Cambiar Foto</button>
                 </form>
-                <br>
             </div>
             
             <div id="divFormDatosP">
                 <form  id='formCambiarDatosP' class="d-grid" style="justify-content: center; ">
                 <hr>            
-                <h3>Cambiar datos</h3>
+                <h5 style="text-align: center; "  >Datos</h5>
                 
                 <br>
+
+                <select class="selectpicker" id="divProducto" >                        
+                       
+                </select>   
 
                     <label id="label_nombreProducto">Nombre Producto</label>
                     <input 
                     id="nombreProducto" 
                     type="text" 
-                    name="nombre" 
+                    name="nombreProducto" 
                     class="form-control mb-2" 
                     placeholder="nombre Producto" 
-                    required>
-                    <br>
+                    
+                    >
+                   
 
                     <label>Nombre Categoria</label>
                     <input 
@@ -258,8 +268,14 @@
                     name="categoria" 
                     class="form-control mb-2" 
                     placeholder="Categoria" 
-                    required>
-                    <br>
+                    >
+
+
+                    
+                    <select class="selectpicker" id="divCategoria" >                        
+                       
+                    </select>   
+                    
 
                     <select class="selectpicker" id="estadoCategoria" >                        
                         <option value=true  >  Categoría True  </option>
@@ -273,7 +289,7 @@
                     name="precio" 
                     class="form-control mb-2" 
                     placeholder="Precio" 
-                    required>
+                    >
 
                     <label id="label_descripcion">Descrpción</label>
                     <input 
@@ -281,22 +297,73 @@
                     type="text" 
                     name="descripcion" 
                     class="form-control mb-2" 
-                    placeholder="Descripcion" 
-                    required>
-                    <br>
+                    placeholder="Descripcion"                     
+                    >
+                   
 
                     <select class="selectpicker" id="disponible" >                        
                         <option value=true  >  prod. disponible: SI  </option>
                         <option value=false >  prod. disponible: NO </option>                        
                     </select>         
-                    <br>
+                    
                     <button   id="change_buttonP" type="submit" class = "btn btn-primary">
                         Editar
                     </button>
-                    <br>
+                    
                 </form>
             </div>
 
+        </div>
+    </div>
+
+    <!-- BUSCAR -->
+    <div class="row mt-5 " style="justify-content: center ; ">
+        <div class="col-sm-6" style="justify-content: center" id="divBuscar">
+            <form  id='formBuscar' class="d-grid" style="justify-content: center; " > 
+
+                <hr>
+                <h5 >Buscar</h5>
+                <select class="selectpicker" id="buscar" >                        
+                    <option value=/api/buscar/usuarios/  >  Usuario  </option>
+                    <option value=/api/buscar/productos/ >  Producto </option>   
+                    <option value=/api/buscar/categorias/ >  Categoría </option>                         
+                </select>  
+
+                    <input 
+                    id="buscarInput" 
+                    type="text" 
+                    name="buscarInput" 
+                    class="form-control mb-2" 
+                    placeholder="Escriba para buscar"
+                    required 
+                    >                
+                
+                    <button   id="button_search" type="submit" class = "btn btn-primary">
+                        Buscar
+                    </button>
+                
+            </form>
+        
+        </div>
+    </div>
+    
+
+    <!-- Mostrar Busqueda -->
+    <div class="row mt-5" style="justify-content:center;" >
+        <div class="row mt-5" style="justify-content: center" id="divMostrarBusqueda" >
+            <div  style=" background-color: black" >
+                
+                
+                <h2>Resultados Busqueda</h2>
+                <hr>
+                <section id="resultadoBusqueda" 
+                        style="border:1px solid white;
+                               overflow:hidden;
+                               text-align: center; 
+                       " >                     
+                </section>
+                 
+            </div>
         </div>
     </div>
 

@@ -1,10 +1,22 @@
 
 let usuario = null;
 
+const divBuscar = document.querySelector('#divBuscar');
 
 
 const noRoles     = document.querySelector('#noRoles');
 const rolUsuarios     = document.querySelector('#rolUsuarios');
+const divCategoria     = document.querySelector('#divCategoria');
+const divProducto     = document.querySelector('#divProducto');
+const verDivSelectUsuarios     = document.querySelector('#verDivSelectUsuarios');
+const divEditarProductos     = document.querySelector('#divEditarProductos');
+
+const button_search     = document.querySelector('#button_search');
+const formBuscar     = document.querySelector('#formBuscar');
+const buscar     = document.querySelector('#buscar');
+const buscarInput     = document.querySelector('#buscarInput');
+const resultadoBusqueda     = document.querySelector('#resultadoBusqueda');
+
 
 
 
@@ -15,6 +27,9 @@ const formSubirImagen     = document.querySelector('#formSubirImagen');
 const divFormImg     = document.querySelector('#divFormImg');
 const divFormDatos     = document.querySelector('#divFormDatos');
 const divUsuarios     = document.querySelector('#divUsuarios');
+
+const divSelectUsuarios     = document.querySelector('#divSelectUsuarios');
+
 const divCateProd     = document.querySelector('#divCateProd');
 
 
@@ -47,7 +62,7 @@ const estoyEn = document.querySelector('#estoyEn');
 const divFormImgP       = document.querySelector('#divFormImgP');
 const formCambiarDatosP = document.querySelector('#formCambiarDatosP');
 const formSubirImagenP  = document.querySelector('#formSubirImagenP');
-const fotoUserP         = document.querySelector('#usarContrasfotoUserPeña');
+const fotoUserP         = document.querySelector('#fotoUserP');
 const fileuploadP       = document.querySelector('#fileuploadP');
 const upload_buttonP    = document.querySelector('#upload_buttonP');
 const divFormDatosP     = document.querySelector('#divFormDatosP');
@@ -72,8 +87,12 @@ const enlace='/api/auth/'
 const enlaceSubir='/api/uploads/usuarios/' 
 const enlaceAssets="../../assets/goku.png"
 const enlaceEditar='/api/usuarios/' 
-const enlaceCategoria='api/categorias' 
-const enlaceProducto='api/productos'      
+const enlaceCategoria='/api/categorias/' 
+const enlaceProducto='/api/productos/'      
+
+const enlaceSubirPC='/api/uploads/' 
+
+const enlaceUser='/api/usuarios/' 
 
 
 const enlaceBuser='/api/buscar/usuarios/'  
@@ -111,17 +130,46 @@ const validarJWT = async() => {
     document.title = 'ADMIN '+usuario.nombre; //El texto de la pestaña de chat.html
     fotoUser.src='/js/goku.png'
 
-    parametrosNuevoUsuario();
+    parametrosIniciales(seleccion.value) //parametrosUsuario();
 
 } 
+const parametrosIniciales=async(accion)=>{
 
-const parametrosNuevoUsuario=()=>{
-    divFormDatosP.style.display ='none';            
-    divFormImgP.style.display='none';
-        divCateProd.style.display ='none';
-        divUsuarios.style.display ='none';  
-        divFormDatos.style.display ='block';            
-        divFormImg.style.display='none';
+    estado.style.display='none';
+    estadoCategoria.style.display='none';
+    divBuscar.style.display='none';
+    divProducto.style.display='none';
+    //verDivSelectUsuarios.style.display='none';
+
+    divMostrarBusqueda.style.display='none';
+
+    
+    
+    
+    console.log('addEventListener',seleccion.value)
+    switch(accion){
+        
+        case 'nuevoUser'  :
+        case 'editarUser' :
+        case 'eliminarUser' :
+
+            estoyEn.innerHTML= 'CREAR NUEVO USUARIO'
+
+            if(accion=='nuevoUser'){
+                password.value='';
+                password2.value=''; 
+            }
+
+            nombre.disabled=false;
+            rol.disabled=false;
+
+            divFormDatosP.style.display ='none';            
+            divFormImgP.style.display='none';
+
+            divCateProd.style.display ='none';
+            divUsuarios.style.display ='none';  
+            divFormDatos.style.display ='block';            
+            divFormImg.style.display='none';
             selectButton.disabled=false;
             id_user.value='';
             id_user.disabled=true;
@@ -131,204 +179,407 @@ const parametrosNuevoUsuario=()=>{
             rol.value='USER_ROLE';
             estado.value=true;
             fotoUser.src='/js/goku.png';
-            
-            usarContraseña.style.visibility ='hidden'; 
-            password.disabled=false;
-            password2.disabled=false;
-            correo.disabled=false; 
-}
-const parametrosVerUsuarios=()=>{
-    divFormDatosP.style.display ='none';            
-    divFormImgP.style.display='none';
-    divCateProd.style.display ='none';
-    divUsuarios.style.display ='block';  
-    divFormDatos.style.display ='none';            
-    divFormImg.style.display='none';
-        selectButton.disabled=false;
-        id_user.value='';
-        id_user.disabled=true;
-        mostrar()
-}
-const parametrosVerCategorias=()=>{
-    divFormDatosP.style.display ='none';            
-    divFormImgP.style.display='none';
-    divCateProd.style.display ='block';
-    divUsuarios.style.display ='none';  
-    divFormDatos.style.display ='none';            
-    divFormImg.style.display='none';
-        selectButton.disabled=false;
-        id_user.value='';
-        id_user.disabled=true;
-        mostrarCP();
-}
-const parametrosEditarUsuario=  async ()=>{
-    divFormDatosP.style.display ='none';            
-    divFormImgP.style.display='none';
-    divUsuarios.style.display ='none'; 
-    divCateProd.style.display ='none';
-    selectButton.disabled=false;
-    id_user.value='';
-    id_user.disabled=false;
-    funcionActual='editarUser';
-    nombre.value='';
-    correo.value='';
-    rol.value='USER_ROLE';
-    estado.value=true;
-    fotoUser.src='/js/goku.png'
-    divFormDatos.style.display ='block'; 
-    divFormImg.style.display='block';
-    usarContraseña.style.visibility ='visible'; 
-    usarContraseña.checked =false;
-    password.disabled=true;
-    password2.disabled=true;
-    correo.disabled=true; 
-}
-const parametrosNuevaCategoria=()=>{
+            usarContraseña.style.display ='none'; 
+            change_button.innerHTML='Crear Usuario';
 
-    
-    divFormDatosP.style.display ='block';            
-    divFormImgP.style.display='none';
+            await actualizarusuarios()
 
-    divCateProd.style.display ='none';
-    divUsuarios.style.display ='none';  
-    divFormDatos.style.display ='none';            
-    divFormImg.style.display='none';
+            if(seleccion.value=='editarUser'||seleccion.value=='eliminarUser'){
 
-    
-
-        
-        id_user.value='';
-        id_user.disabled=true;
-        funcionActual='nuevaCateg';
-
-        nombreProducto.value='';
-        categoria.value='';        
-        estadoCategoria.value=true;
-        disponible.value=true;
-        precio.value=0;
-        descripcion.value='';
-        //fotoUserP.src='/js/goku.png';
-
-        label_nombreProducto.style.display='none';
-        label_precio.style.display='none';
-        label_descripcion.style.display='none';
-
-        nombreProducto.style.display ='none';
-        disponible.style.display ='none';
-        precio.style.display ='none';
-        descripcion.style.display ='none';
-        
-        
-        
-}
-const parametrosNuevoProducto=()=>{
-
-    
-    divFormDatosP.style.display ='block';            
-    divFormImgP.style.display='none';
-
-    divCateProd.style.display ='none';
-    divUsuarios.style.display ='none';  
-    divFormDatos.style.display ='none';            
-    divFormImg.style.display='none';
-
-    label_nombreProducto.style.display='none';
-    label_precio.style.display='none';
-    label_descripcion.style.display='none';
-
-        
-        id_user.value='';
-        id_user.disabled=true;
-        funcionActual='nuevoProd';
-
-        nombreProducto.value='';
-        categoria.value='';        
-        estadoCategoria.value=true;
-        disponible.value=true;
-        precio.value=0;
-        descripcion.value='';
-        //fotoUserP.src='/js/goku.png';
-
-        label_nombreProducto.style.display='block';
-        label_precio.style.display='block';
-        label_descripcion.style.display='block';
-
-        nombreProducto.style.display ='block';
-        disponible.style.display ='block';
-        precio.style.display ='block';
-        descripcion.style.display ='block';
-        
-        
-        
-}
-
-//Selector de función
-seleccion.addEventListener("change", async ev=>{
-    console.log('addEventListener',seleccion.value)
-    
-    if(seleccion.value=='nuevoUser'){
-        parametrosNuevoUsuario();  
-        estoyEn.innerHTML=` Estoy en :  ${seleccion.value} ` 
-    }
-
-    if(seleccion.value=='editarUser'){
-        await parametrosEditarUsuario();
-
-        console.log('id_user es',id_user.value) 
-
-        if(id_user.value==''){
-            divFormDatos.style.display ='none';            
-            divFormImg.style.display='none'; 
-        }
-        
-    }
-
-    if(seleccion.value=='verUser')  parametrosVerUsuarios();  
-    if(seleccion.value=='verCateg')  parametrosVerCategorias();
-    if(seleccion.value=='nuevaCateg') parametrosNuevaCategoria();
-    if(seleccion.value=='nuevoProd') parametrosNuevoProducto();
-})
-//submit Funcion (editar con ID)
- formFuncion.addEventListener('submit',  async (ev)=>{
-    ev.preventDefault();//permite cancelar el evento sin detener el funcionamiento  
-    estoyEn.innerHTML=` Estoy en :  ${seleccion.value} `      
-    //console.log('id user es ', id_user.value)
-    
-    if(seleccion.value=='editarUser'){
-
-        if(id_user.value!=''&&id_user.value.length> 10){
-
-            console.log('voy a buscar em ',enlaceBuser+id_user.value)
-            const resp =  await fetch(enlaceBuser+id_user.value,{});            
-            const {results}=  await resp.json(); 
-            usuarioEdit=results[0];
-            console.log('usuarioEdit',usuarioEdit)
-            if(usuarioEdit){
-                funcionActual='editarUser'
-                nombre.value=usuarioEdit.nombre;
-                correo.value=usuarioEdit.correo;
-                rol.value=usuarioEdit.rol;
-                estado.value=usuarioEdit.estado;
-                (usuarioEdit.img) 
-                    ? fotoUser.src=usuarioEdit.img
+                estoyEn.innerHTML= 'EDITAR USUARIO';
+                (userObj[divSelectUsuarios.value].img) 
+                    ? fotoUser.src= userObj[divSelectUsuarios.value].img
                     : fotoUser.src='/js/goku.png';
-                divFormDatos.style.display ='block';
+                change_button.innerHTML='Editar Usuario';
+                funcionActual='editarUser';
+
                 divFormImg.style.display='block';
-                usarContraseña.style.visibility ='visible'; 
+                usarContraseña.style.display ='block'; 
+                
+                correo.disabled=false
+                id_user.value   =   userObj[divSelectUsuarios.value].uid          
+                nombre.value    =   userObj[divSelectUsuarios.value].nombre
+                correo.value    =   userObj[divSelectUsuarios.value].correo
+                rol.value       =   userObj[divSelectUsuarios.value].rol
                 password.disabled=true;
                 password2.disabled=true;
                 correo.disabled=true;
+
+                
+                    
+                    nombre.requided=true;
+                    upload_button.style.display='block'
+                    fileupload.style.display='block'
+
+                if(seleccion.value=='eliminarUser'){
+                    estoyEn.innerHTML= 'ELIMINAR USUARIO'
+                    funcionActual='eliminarUser';
+                    usarContraseña.style.display ='none'; 
+                    nombre.disabled=true;
+                    rol.disabled=true;
+                    nombre.requided=false;
+                    change_button.innerHTML='ELIMINAR Usuario';
+                    upload_button.style.display='none'
+                    fileupload.style.display='none'
+                }
             }
-        }else{funcionActual='' }                        
-    }   
-    if(seleccion.value=='nuevoUser') parametrosNuevoUsuario(); 
-    if(seleccion.value=='verCateg') parametrosVerCategorias();
-    if(seleccion.value=='nuevaCateg') parametrosNuevaCategoria();
-    if(seleccion.value=='nuevoProd') parametrosNuevoProducto();
+            
+            break;     
+
+        case 'nuevoProd'  :
+        case 'editarProd' :
+        case 'eliminarProd' :
+
+            await actualizarCategorias()
+            await actualizarProductos()
+
+            divEditarProductos.style.display='block';
+            
+            divEditarProductos.style.backgroundColor='black';
+            //verDivSelectUsuarios.style.display='block';
+            divProducto.style.display='block';
+            estoyEn.innerHTML= 'CREAR NUEVO PRODUCTO';
+            disponible.required=false;
+            disponible.disabled=false;
+
+            nombreProducto.disabled=false;
+            divCategoria.disabled=false;
+
+            precio.disabled=false; 
+            descripcion.disabled=false;   
+                  
+            upload_buttonP.style.display='block'
+            fileuploadP.style.display='block'
+
+
+            divFormDatosP.style.display ='block';            
+            divFormImgP.style.display='none';
+        
+            divCateProd.style.display ='none';
+            divUsuarios.style.display ='none';  
+            divFormDatos.style.display ='none';            
+            divFormImg.style.display='none';
+        
+            label_nombreProducto.style.display='none';
+            label_precio.style.display='none';
+            label_descripcion.style.display='none';
+        
+                
+                id_user.value='';
+                id_user.disabled=true;
+                funcionActual='nuevoProd';
+        
+                nombreProducto.value='';
+                categoria.value='';        
+                estadoCategoria.value=true;
+                disponible.value=true;
+                precio.value=0;
+                descripcion.value='';
+                //fotoUserP.src='/js/goku.png';
+        
+                label_nombreProducto.style.display='block';
+                label_precio.style.display='block';
+                label_descripcion.style.display='block';
+        
+                nombreProducto.style.display ='block';
+                disponible.style.display ='none';
+                precio.style.display ='block';
+                descripcion.style.display ='block';
+                estadoCategoria.style.display='none';
+                change_buttonP.innerHTML='Crear Producto';
+                nombreProducto.required=true;
+                divCategoria.style.display='block';
+                categoria.style.display='none';
+                categoria.required=false;
+        
+                
+                console.log('prodObj[divProducto.value] ..',prodObj[divProducto.value])
+                console.log('img..',prodObj[divProducto.value].img)
+                
+                
+                
+                if(seleccion.value=='editarProd'||seleccion.value=='eliminarProd'){
+                    estoyEn.innerHTML= 'EDITAR PRODUCTO';
+
+                    (prodObj[divProducto.value].img) 
+                            ? fotoUserP.src= prodObj[divProducto.value].img
+                            : fotoUserP.src='/js/goku.png';
+                    divFormImgP.style.display='block';
+                    change_buttonP.innerHTML='Editar Producto';
+                    funcionActual='editarProd';
+                    disponible.style.display ='block'; 
+        
+                    nombreProducto.value    =   divProducto.value
+                    categoria.value         =   prodObj[divProducto.value].categoria
+                    precio.value            =   prodObj[divProducto.value].precio
+                    descripcion.value       =   prodObj[divProducto.value].descripcion
+                    disponible.value        =   prodObj[divProducto.value].disponible
+                    id_user.value=prodObj[divProducto.value]._id
+
+
+                    if(seleccion.value=='eliminarProd'){
+                        estoyEn.innerHTML= 'ELIMINAR PRODUCTO';
+
+                        funcionActual='eliminarProd';     
+
+                        nombreProducto.required=false;
+                        nombreProducto.disabled=true;
+
+                        divCategoria.required=false;
+                        divCategoria.disabled=true;
+
+                        disponible.required=false;
+                        disponible.disabled=true;
+
+                        precio.disabled=true; 
+                        descripcion.disabled=true;   
+
+                        change_buttonP.innerHTML='ELIMINAR Producto';
+                        upload_buttonP.style.display='none'
+                        fileuploadP.style.display='none'
+                    }
+                }
+                
+            break;
+
+        
+        case 'verUser':
+
+            estoyEn.innerHTML= 'MOSTRAR USUARIOS';
+
+
+            divFormDatosP.style.display ='none';            
+            divFormImgP.style.display='none';
+            divCateProd.style.display ='none';
+            divUsuarios.style.display ='block';  
+            divFormDatos.style.display ='none';            
+            divFormImg.style.display='none';
+            selectButton.disabled=false;
+            id_user.value='';
+            id_user.disabled=true;
+            mostrar()
+            break;   
+        case 'verCateg':
+            estoyEn.innerHTML= 'MOSTRAR PRODUCTOS Y CATEGORÍAS';
+
+            divFormDatosP.style.display ='none';            
+            divFormImgP.style.display='none';
+            divCateProd.style.display ='block';
+            divUsuarios.style.display ='none';  
+            divFormDatos.style.display ='none';            
+            divFormImg.style.display='none';
+                selectButton.disabled=false;
+                id_user.value='';
+                id_user.disabled=true;
+                mostrarCP();
+        
+            break;         
+        
+               
+
+        case 'nuevaCateg':
+        case 'editarCateg':
+        case 'eliminarCateg':
+
+            await actualizarCategorias()
+            estoyEn.innerHTML= 'CREAR NUEVA CATEGORÍA';
+            divEditarProductos.style.display='block';
+
+            divFormDatosP.style.display ='block';            
+            divFormImgP.style.display='none';
+            divCateProd.style.display ='none';
+            divUsuarios.style.display ='none';  
+            divFormDatos.style.display ='none';            
+            divFormImg.style.display='none';
+        
+            categoria.disabled=false ;
+                id_user.value='';
+                id_user.disabled=true;
+                funcionActual='nuevaCateg';
+        
+                nombreProducto.value='';
+                categoria.value='';        
+                estadoCategoria.value=true;
+                disponible.value=true;
+                precio.value=0;
+                descripcion.value='';
+                //fotoUserP.src='/js/goku.png';
+                label_nombreProducto.style.display='none';
+                label_precio.style.display='none';
+                label_descripcion.style.display='none';
+                nombreProducto.style.display ='none';
+                disponible.style.display ='none';
+                precio.style.display ='none';
+                descripcion.style.display ='none';
+                estadoCategoria.style.display='none';
+                change_buttonP.innerHTML='Crear Categoria';
+                nombreProducto.required=false;
+                divCategoria.display='none';
+                categoria.style.display='block';
+                categoria.required=true;
+
+                if(accion=='editarCateg'||accion=='eliminarCateg'){
+                    estoyEn.innerHTML= 'EDITAR CATEGORÍA';
+                    id_user.value='';
+                    id_user.disabled=true;
+                    funcionActual='editarCateg';
+                    categoria.value=divCategoria.value;
+                    id_user.value=cateObj[divCategoria.value];
+                    change_buttonP.innerHTML='Editar Categoria';   
+                    if (accion=='eliminarCateg') {
+                        funcionActual='eliminarCateg';
+                        change_buttonP.innerHTML='Eliminar Categoria'; 
+                        categoria.disabled=true ;
+                    }          
+                }
+
+
+                
+
+
+            break;
+        
+        
+                   
+        
+
+        case 'buscar':
+            id_user.value='';
+            divCateProd.style.display='none';   
+            divUsuarios.style.display='none';            
+            divEditarProductos.style.display='none';
+            divFormImg.style.display='none';
+            divFormDatos.style.display='none';
+            divBuscar.style.display='block';
+
+            break;
+
+        default:
+            estoyEn.innerHTML= 'FUNCIÓN NO ESTABLECIDA';
+            return console.log('accion es ',accion);
+      }
+    
+}
+//Selector de función
+seleccion.addEventListener("change", async ev=>{
+    parametrosIniciales(seleccion.value)
+})
+//submit Funcion (editar con ID)
+ formFuncion.addEventListener('submit',  async (ev)=>{
+    ev.preventDefault();
+    parametrosIniciales(seleccion.value)
 })
 
 
-//Mostrar los usuarios
+
+
+
+
+
+//*******************************     MOSTRAR     ******************************************** */
+
+const mostrarBusqueda=async(arreglo,buscar)=>{
+    
+    console.log('arreglo que llega',arreglo)
+    console.log('buscar que llega',buscar)
+
+    divMostrarBusqueda.style.display='block';
+
+    
+    let disponibleP=''
+    let imagen=''
+    
+    busquedaHtml=''
+    arreglo.forEach((valor,i)=>{
+
+        console.log('valor del for ..',valor)
+        busquedaHtml+=`          
+                
+        <div
+        style="                      
+        background-color:white;                                       
+        border:1px  solid black; 
+        width:30%;
+        height:500px;
+        margin:0px auto;
+        float:left;
+        margin:10px
+        "
+        >`
+            
+        
+        if( buscar=='/api/buscar/usuarios/'  ){
+                
+            console.log('estoy en buscar ususarios');
+            (valor.img)
+                ? imagen=valor.img                     
+                : imagen='/js/goku.png';
+
+            busquedaHtml+=` <div class="d-grid" style="justify-content: center" >
+                        <h5 >${valor.nombre}</h5> 
+                        <img src="${imagen}" width="200" height="200" style="margin: 0 auto;"> 
+                        <p>Correo: $${valor.correo}</p>
+                        <p>estado: $${valor.estado}</p>
+                        <p>uid: $${valor.uid}</p>
+                        <p>rol: $${valor.rol}</p>
+                        <p>google: $${valor.google}</p>
+                    </div>
+                </div>                        
+        `
+
+        }  
+
+        if( buscar=='/api/buscar/productos/'){
+                
+
+
+                console.log('estoy en buscar productos');
+
+                (valor.img)
+                    ? imagen=data.img                     
+                    : imagen='/js/goku.png';
+                    
+                (valor.disponible)
+                    ? disponibleP='Disponible: SI'                     
+                    : disponibleP='Disponible: NO';
+
+                busquedaHtml+=` <div class="d-grid" style="justify-content: center" >
+                            <h5 >${valor.nombre}</h5> 
+                            <img src="${imagen}" width="200" height="200" style="margin: 0 auto;"> 
+                            <p>precio: $${valor.precio}</p>
+                            <p>disponible: ${disponibleP}</p>
+                            <p>categoría: ${valor.categoria.nombre}</p>
+                            <p>Creado por: ${userObj[valor.usuario].nombre}</p>
+                            <p>Descripción: ${valor.descripcion}</p>
+                            <p>ID producto: ${valor._id}</p>
+                        </div>
+                    </div>                        
+            `
+
+        }
+
+        if( buscar=='/api/buscar/categorias/'){
+                
+            console.log('estoy en buscar categorias');
+
+            busquedaHtml+=` <div class="d-grid" style="justify-content: center" >
+                        <h5 >${valor.nombre}</h5> 
+                        <p>Creado por: ${userObj[valor.usuario].nombre}</p>
+                        <p>ID Categoría: ${valor._id}</p>
+                    </div>
+                </div>                        
+        `
+        }
+      
+    })
+    console.log('arreglo.length',arreglo.length);
+    (arreglo.length!=0)
+        ? resultadoBusqueda.innerHTML=busquedaHtml
+        : resultadoBusqueda.innerHTML=`<h5 >No hay resultados en la busqueda</h5> ` ;
+
+
+
+}
 const mostrar=async()=>{
     const resp = await fetch(enlaceEditar,{});
     const {usuarios}= await resp.json(); 
@@ -425,8 +676,6 @@ const mostrar=async()=>{
 
 
 }
-
-//Mostrar las categorías y usuarios 
 const mostrarCP = async() =>{
 
 
@@ -483,7 +732,7 @@ const mostrarCP = async() =>{
                 ? imgProducto=data.img                     
                 : imgProducto='/js/goku.png';
 
-            (data.disponible)
+            (data.disponible=="true")
                 ? disponibleP='Disponible: SI'                     
                 : disponibleP='Disponible: NO';
 
@@ -528,50 +777,7 @@ const mostrarCP = async() =>{
 
 
 
-
-
-
-
-
-//Crear Usuario
-const crearUsuario=()=>{
-    const formData={};     
-    formData['nombre']=nombre.value;
-    formData['rol']=rol.value;
-    formData['estado']=estado.value;    
-    formData['password']=password.value;
-    formData['correo']=correo.value;
-    formData['img']='';
-    
-
-    console.log('formData SUBIR es ',formData)
-    
-    fetch(enlaceEditar,{
-        method: 'POST',
-        body: JSON.stringify(formData),//Contiene correo y password
-        headers:{'Content-Type':'application/json'}
-    })
-    .then(resp =>resp.json()) //Extraemos el .json
-    .then( (resp)=>{
-        console.log('la respuesta Nuevo usuario es');
-        console.log(resp)
-        if(!resp.usuario.uid){
-            return console.error('error');
-        }        
-        
-        divFormDatos.style.display ='none';
-        divFormImg.style.display='block';
-        id_user.value=resp.usuario.uid;
-
-    })
-    .catch(err=>{
-        console.log(err)
-    })
-}
-
-
-
-//Accion editar usuarios
+//********************************  Crear editar USUARIOS   ************************************************************ */
 formCambiarDatos.addEventListener('submit', ev=>{
   
     ev.preventDefault();        //No recargar página    
@@ -586,10 +792,10 @@ formCambiarDatos.addEventListener('submit', ev=>{
                     : window.alert('Las contraseñas no son iguales')
             }else{
                 console.log('voy a entrar a editarUsuario')
-                editarUsuario(id_user.value);           
+                crearEditarUsuario(funcionActual,id_user.value);           
             }   
         }else{
-            editarUsuario(id_user.value);   
+            crearEditarUsuario(funcionActual,id_user.value);   
         }
 
     }
@@ -601,65 +807,122 @@ formCambiarDatos.addEventListener('submit', ev=>{
                 : window.alert('Las contraseñas no son iguales')
         }else{
             console.log('voy a entrar a editarUsuario')
-            crearUsuario(id_user.value);           
+            crearEditarUsuario(funcionActual,id_user.value);           
         }
 
+    if(funcionActual=='eliminarUser') crearEditarUsuario(funcionActual,id_user.value)
+
+    
+
 
     }
+
+    if(funcionActual=='eliminarUser') crearEditarUsuario(funcionActual,id_user.value); 
 
 })
-//Funcion editar Usuario
-const editarUsuario=(id)=>{
-    const formData={};          //Creo un arreglo con los elementos del formulario
-    
-    formData['nombre']=nombre.value;
-    formData['rol']=rol.value;
-    formData['estado']=estado.value;
+const crearEditarUsuario=async (accion,id_editar)=>{
+    let formData={};     
+    let enlace='';
+    let crud='POST'
 
-    if(usarContraseña.checked){
+   
+    if(accion=='nuevoUser'){
+        
+
+        formData['nombre']=nombre.value;
+        formData['rol']=rol.value;
         formData['password']=password.value;
+        formData['correo']=correo.value;
+        formData['img']='';       
+        enlace=enlaceUser;
+        crud='POST'
     }
 
+    if(accion=='editarUser'){
+        enlace=enlaceUser+id_editar;
+        formData['nombre']=nombre.value;
+        formData['rol']=rol.value;
+        formData['estado']=estado.value;
+
+        if(usarContraseña.checked){
+            formData['password']=password.value;
+        }
+        crud='PUT'
+    }
+
+    if(accion=='eliminarUser'){
+        enlace=enlaceUser+id_editar;
+        crud='DELETE'
+    }
+
+       
     console.log('formData es ',formData)
+    console.log('el enlace es ',enlace)
     
-    fetch(enlaceEditar+id,{
-        method: 'PUT',
+    await fetch(enlace,{
+        method: crud,
         body: JSON.stringify(formData),//Contiene correo y password
-        headers:{'Content-Type':'application/json'}
+        headers:{
+            'Content-Type':'application/json',
+            'c-token':localStorage.getItem('token')
+        }
     })
     .then(resp =>resp.json()) //Extraemos el .json
-    .then( ({usuario})=>{
-        if(!usuario.nombre){
+    .then( async (resp)=> {
+        console.log('la respuesta de la petición es');
+        console.log(resp)
+        if(!resp.nombre&&!resp.usuario){
             return console.error('error');
+        } 
+        //divFormDatos.style.display ='none';
+        //divFormImg.style.display='block';
+        
+        console.log('crud es ',crud)
+        if(crud=='DELETE'){
+            console.log('resp.usuario',resp.usuario);
+            id_user.value='';        
+            change_button.style.backgroundColor= "red";    
+            change_button.style.color= '#3d3d3d';
+        }else{
+            id_user.value=resp._id; 
+            if(accion=='nuevoUser')    id_user.value=resp.usuario.uid; 
+            change_button.style.backgroundColor= "#89ff5c";    
+            change_button.style.color= '#3d3d3d';
+        }       
+        
+
+        setTimeout(function(){
+            console.log('estoy en el temporizador')
+            change_button.style.backgroundColor= "blue";    
+            change_button.style.color= 'white';
+            }, 1200);
+        
+        if(accion=='eliminarUser') {
+            await actualizarusuarios();
+            id_user.value   =   userObj[divSelectUsuarios.value].uid 
+            parametrosIniciales(accion)
         }
-        //document.title='editando'+usuario.nombre
-        change_button.style.backgroundColor= "#89ff5c";    
-        change_button.style.color= '#3d3d3d';
+
+        if(accion=='editarUser' || accion=='nuevoUser'){ 
+            actualizarusuarios();
+            
+            if(accion=='nuevoUser'){
+                fotoUser.src='/js/goku.png';
+                divFormDatos.style.display ='none';
+                divFormImg.style.display='block';
+            } 
+        }
     })
     .catch(err=>{
-        console.log(err)
+        console.log(err) 
     })
 }
-//Escoger cambiar la contraseña del usuario
-usarContraseña.addEventListener("change", ev=>{
-    console.log('usarContraseña es ..,.',usarContraseña.checked)
-    
-    if(usarContraseña.checked){
-        password.required=true;
-        password.disabled=false;
-        password2.required=true;
-        password2.disabled=false;
-        
-    }else{
-        password.required=false;
-        password.disabled=true;
-        password2.required=false;
-        password2.disabled=true;
-    }
 
 
-})
-//Subir Foto Usuario
+
+
+//************************************  Subir fotos ******************************************************** */
+
 formSubirImagen.addEventListener('submit', ev=>{
     ev.preventDefault();//permite cancelar el evento sin detener el funcionamiento       
     
@@ -685,7 +948,56 @@ formSubirImagen.addEventListener('submit', ev=>{
             upload_button.style.color= '#3d3d3d';
             fotoUser.src=response.img
         }else{
-            parametrosNuevoUsuario();
+            parametrosIniciales(seleccion.value)
+            //parametrosUsuario();
+        }
+        
+
+        console.log('Success:', response.img)
+    })
+    .catch(error =>  console.warn(error))
+    //.then(response => console.log('Success:', response))
+  
+
+})
+formSubirImagenP.addEventListener('submit', ev=>{
+    ev.preventDefault();    
+    
+    const enlaceFuncion='productos/';
+
+    let formData = new FormData();    
+    formData.append('archivo', fileuploadP.files[0]);
+  
+    fetch(enlaceSubirPC+enlaceFuncion +id_user.value, { 
+        method: "PUT", 
+        body: formData
+    })    
+    .then(response => response.json())
+    .then(response=>{ //Grabo el token en localstorage
+        
+        if(!response.img){
+            console.log('está super malo todo')
+            return console.error(data.msg);
+        }
+
+        if(funcionActual=='editarProd'|| funcionActual=='nuevoProd'){
+            upload_buttonP.style.backgroundColor= "#89ff5c";    
+            upload_buttonP.style.color= '#3d3d3d';
+            fotoUserP.src=response.img            
+
+            setTimeout(function(){               
+                
+                    console.log('estoy en el temporizador')
+                    upload_buttonP.style.backgroundColor= "blue";    
+                    upload_buttonP.style.color= 'white';
+                    if(funcionActual=='nuevoProd') parametrosIniciales(seleccion.value) ;//parametrosProducto();   
+                    
+                }, 1200);
+
+            //             
+                       
+        }else{
+            parametrosIniciales(seleccion.value)// parametrosProducto();
         }
         
 
@@ -698,15 +1010,343 @@ formSubirImagen.addEventListener('submit', ev=>{
 })
 
 
+
+
+//************************************ Crear EDITAR User, Prod, Catg ******************************************************** */
+
+formCambiarDatosP.addEventListener('submit', ev=>{
+    console.log('Submit ... valor de funcionActual= ',funcionActual)
+    ev.preventDefault();        //No recargar página    
+    crearCateProd(funcionActual, id_user.value); 
+})
+
+const crearCateProd=async (accion,id_editar)=>{
+    let formData={};     
+    let enlace='';
+    let crud='POST'
+
+    if(accion=='nuevaCateg'){
+        formData['nombre']=categoria.value;
+        enlace=enlaceCategoria;
+        crud='POST';
+    }
+     
+    if(accion=='nuevoProd'){
+        
+        formData['categoria']=divCategoria.value;
+        formData['nombre']=nombreProducto.value;
+        if(descripcion.value)  formData['descripcion']=descripcion.value;
+        if(precio.value)  formData['precio']=precio.value;
+        enlace=enlaceProducto;
+        crud='POST'
+    }
+
+    if(accion=='editarCateg'){
+        enlace=enlaceCategoria+id_editar;
+        formData['nombre']=categoria.value;
+        crud='PUT'
+    }
+
+    if(accion=='editarProd'){
+        enlace=enlaceProducto+id_editar;
+        formData['nombre']=nombreProducto.value;
+        formData['disponible']=disponible.value;
+        if(descripcion.value)  formData['descripcion']=descripcion.value;
+        if(precio.value)  formData['precio']=precio.value;
+
+
+        crud='PUT'
+    }
+
+    if(accion=='eliminarProd'){
+        enlace=enlaceProducto+id_editar;
+        crud='DELETE'
+    }
+
+    if(accion=='eliminarCateg'){
+        enlace=enlaceCategoria+id_editar;
+        crud='DELETE'
+    }
+
+       
+    console.log('formData es ',formData)
+    console.log('el enlace es ',enlace)
+    console.log('eCRUD es ',crud)
+    
+    await fetch(enlace,{
+        method: crud,
+        body: JSON.stringify(formData),//Contiene correo y password
+        headers:{
+            'Content-Type':'application/json',
+            'c-token':localStorage.getItem('token')
+        }
+    })
+    .then(resp =>resp.json()) //Extraemos el .json
+    .then( async (resp)=>{
+        console.log('la respuesta es');
+        console.log(resp)
+        
+        
+        if(crud=='POST'){
+            //if(!resp.nombre&&!resp.producto ){ 
+            if(!resp.nombre){ 
+                console.log('entre al condicional del error')
+                console.log('resp.errors[0]',resp.errors[0])
+                console.log('resp.errors[0].msg',resp.errors[0].msg)
+                
+                if(resp.errors[0].msg=='existente'){ //lo hago en el backend
+                    //await actualizarProductos();
+                    parametrosIniciales(accion);
+                    console.error('restaurado');
+                    window.alert(` ${formData['nombre']} ya existía, fue restaurado con datos anteriores`);
+                    return;
+                }
+                return console.error('error');
+            } 
+        }
+            
+
+        if(crud=='DELETE'){
+            id_user.value='';        
+            change_buttonP.style.backgroundColor= "red";    
+            change_buttonP.style.color= '#3d3d3d';
+        }else{
+            id_user.value=resp._id; 
+            change_buttonP.style.backgroundColor= "#89ff5c";    
+            change_buttonP.style.color= '#3d3d3d';
+        }       
+        
+
+        
+        
+        
+
+        setTimeout(function(){
+            console.log('estoy en el temporizador')
+            change_buttonP.style.backgroundColor= "blue";    
+            change_buttonP.style.color= 'white';
+            }, 1200);
+
+        if(accion=='nuevaCateg'||accion=='editarCateg') actualizarCategorias();    
+        
+        if(accion=='editarProd' || accion=='nuevoProd'){ 
+            actualizarProductos();
+            //divFormDatosP.style.display ='none';
+            //divFormImgP.style.display='block';
+            if(accion=='nuevoProd'){
+                fotoUserP.src='/js/goku.png';
+                divFormDatosP.style.display ='none';
+                divFormImgP.style.display='block';
+            } 
+        }
+
+        if(accion=='eliminarProd'||accion=='eliminarCateg'){
+            //await actualizarProductos();
+            //id_user.value   =   prodObj[divProducto.value]._id
+            parametrosIniciales(accion)
+        }
+    })
+    .catch(err=>{
+        console.log(err) 
+    })
+}
+
+
+
+
+
+//***************************************   BUSCAR   ********************************************************* */
+formBuscar.addEventListener('submit',  async (ev)=>{
+    ev.preventDefault();//permite cancelar el evento sin detener el funcionamiento  
+    //console.log('id user es ', id_user.value)
+
+    let formData={};     
+    let enlace=buscar.value+buscarInput.value;
+    let crud='GET'
+
+   
+    
+
+       
+    console.log('formData es ',formData)
+    console.log('el enlace es ',enlace)
+    
+    await fetch(enlace ,{
+        method: crud,
+        //body: JSON.stringify(formData),//Contiene correo y password
+        headers:{
+            'Content-Type':'application/json',
+            'c-token':localStorage.getItem('token')
+        }
+    })
+    .then(resp =>resp.json()) //Extraemos el .json
+    .then( async (resp)=> {
+        console.log('la respuesta de la petición es');
+        console.log(resp.results)
+        if(!resp.results){
+            return console.error('error');
+        } 
+        //divFormDatos.style.display ='none';
+        //divFormImg.style.display='block';
+        
+        console.log('crud es ',crud)
+        
+        button_search.style.backgroundColor= "#89ff5c";    
+        button_search.style.color= '#3d3d3d';
+        mostrarBusqueda(resp.results,buscar.value)
+
+
+        setTimeout(function(){
+            console.log('estoy en el temporizador')
+            button_search.style.backgroundColor= "blue";    
+            button_search.style.color= 'white';
+            }, 1200);       
+        
+    })
+    .catch(err=>{
+        console.log(err) 
+    })
+})
+
+
+
+
+
+//************************************ Crear objetos User, Prod, Catg ******************************************************** */
+
+let userObj={}
+const actualizarusuarios=async ()=>{
+    const resp = await fetch(enlaceUser,{});
+    const {usuarios}= await resp.json(); 
+    
+    let cateHtml=''
+    usuarios.forEach((valor)=>{
+        userObj[valor.uid]=valor;
+            cateHtml+=`
+            <option style=" color: black" value="${valor.uid}"> ${valor.nombre} Rol:${valor.rol} </option>                        
+            `
+    })  
+    divSelectUsuarios.innerHTML=cateHtml;
+}
+let cateObj={}
+const actualizarCategorias=async ()=>{
+    console.log('estoy en actualizarCategorias')
+    const resp = await fetch(enlaceCategoria,{});
+    
+    const {categorias}= await resp.json(); 
+    
+    let cateHtml=''
+    categorias.forEach((valor)=>{
+        cateObj[valor.nombre]=valor._id
+        //console.log('el valor.estado es ',valor)
+        
+            cateHtml+=`
+            <option style=" color: black" value="${valor.nombre}"> ${valor.nombre}</option>                        
+            `
+        
+    })     
+
+    divCategoria.innerHTML=cateHtml;
+}
+let prodObj={}
+const actualizarProductos=async ()=>{
+
+    console.log(' estoy en actualizarProductos')
+    const resp = await fetch(enlaceProducto,{});
+    
+    const {productos}= await resp.json(); 
+    let cateHtml=''
+    productos.forEach((valor)=>{
+        prodObj[valor.nombre]=valor
+        
+        if(valor.disponible=="true"){
+            cateHtml+=`
+            <option style=" color: black" value="${valor.nombre}"> ${valor.nombre}</option>                        
+            `
+        }else{
+            cateHtml+=`
+            <option style=" color: red" value="${valor.nombre}"> ${valor.nombre}</option>                        
+            `
+        }
+    })        
+    divProducto.innerHTML=cateHtml;
+}
+
+
+
+
+//*************************************** Selects de variables ********************************************************* */
+
+//Selector de categorias
+divCategoria.addEventListener("change", async ev=>{
+    if(funcionActual=='editarCateg'||funcionActual=='eliminarCateg'){
+        id_user.value=cateObj[divCategoria.value];
+        categoria.value=divCategoria.value
+    } 
+})  
+
+//Select de producto
+divProducto.addEventListener("change", async ev=>{
+    if(funcionActual=='editarProd' || funcionActual=='eliminarProd'){
+        (prodObj[divProducto.value].img) 
+                    ? fotoUserP.src= prodObj[divProducto.value].img
+                    : fotoUserP.src='/js/goku.png';
+        id_user.value=          prodObj[divProducto.value]._id;
+        nombreProducto.value=   prodObj[divProducto.value].nombre;
+        disponible.value=       prodObj[divProducto.value].disponible;
+        descripcion.value=      prodObj[divProducto.value].descripcion;
+        precio.value=      prodObj[divProducto.value].precio;
+        divCategoria.value=      prodObj[divProducto.value].categoria.nombre;
+    } 
+})  
+
+//Select de usuario
+divSelectUsuarios.addEventListener("change", async ev=>{
+    
+
+    if(funcionActual=='editarUser'||funcionActual=='eliminarUser'){
+
+        (userObj[divSelectUsuarios.value].img) 
+                ? fotoUser.src= userObj[divSelectUsuarios.value].img
+                : fotoUser.src='/js/goku.png';
+
+           
+        id_user.value   =   userObj[divSelectUsuarios.value].uid          
+        nombre.value    =   userObj[divSelectUsuarios.value].nombre
+        correo.value    =   userObj[divSelectUsuarios.value].correo
+        rol.value       =   userObj[divSelectUsuarios.value].rol
+          
+    } 
+})  
+//Escoger cambiar la contraseña del usuario
+usarContraseña.addEventListener("change", ev=>{
+    console.log('usarContraseña es ..,.',usarContraseña.checked)
+    
+    if(usarContraseña.checked){
+        password.required=true;
+        password.disabled=false;
+        password2.required=true;
+        password2.disabled=false;
+        
+    }else{
+        password.required=false;
+        password.disabled=true;
+        password2.required=false;
+        password2.disabled=true;
+    }
+
+
+})
+
+
+
+
 //Volver al index
 const salir=()=>{
     window.location='index.html';
 }
 
-const main = async () => {
-    
-    await validarJWT();
-}
+const main = async () => {await validarJWT();}
 main();
 //const socket = io();
 

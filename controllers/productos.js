@@ -38,18 +38,36 @@ const ObtenerProductoID=async(req, res=response) =>{
 
 //actualizarCategoria
 const actualizarProducto =  async (req, res) =>{
-                                                              
+    console.log('recibo el request ..',req.params)                                                     
     const {id}=req.params;                     //Obtengo el ID del enlace, ya está validado
     const {estado, usuario, ...data}=req.body; //No piodemos actualizar el esatado ni el usuario. Solo la categoría                                                          
     
     data.nombre=data.nombre.toUpperCase();     //Nombre de la categoría en mayusculas
     data.usuario=req.usuario._id;              //Actualizo la categoría de dicho ID
 
+
+    console.log('lo que guardo es  el request ..'.green,id, data, {new:true})     
+
     const producto=await Producto.findByIdAndUpdate(id, data, {new:true});
 
     res.json(producto);
 
 }
+
+
+
+const actualizarProductoEstado =  async (req, res) =>{
+    console.log('actualizarProductoEstado ',req)                     
+    const {id, ...data}=req
+    console.log('la data sería ',data)
+    console.log('lo que guardo es NEW el request ..'.red,id, data, {new:true})   
+    const producto=await Producto.findByIdAndUpdate(id, data, {new:true});
+
+    throw new Error('existente')
+    //res.json({msg:'ya existia, lo recuperamos'});
+}
+
+
 
 const crearProducto= async (req, res=response) => {
 
@@ -105,5 +123,6 @@ module.exports={
     ObtenerProductoID,
     actualizarProducto,
     crearProducto,
-    ProductoDelete
+    ProductoDelete,
+    actualizarProductoEstado
 }

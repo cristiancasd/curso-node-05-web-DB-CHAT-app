@@ -55,12 +55,12 @@ const mostrar = async() =>{
     
     categorias.forEach((valor,i)=>{
         cateProdHtml+=`<h5 id="${valor.nombre}"class="text-success" style="
-        background-color:blue; 
+        background-color:black; 
         ">${valor.nombre}</h5>
                         
                         <section style="
                         border:1px solid green;   
-                        background-color:black;
+                        background-color:#373636;
                         overflow:hidden; 
                         "
                         >   
@@ -79,7 +79,7 @@ const mostrar = async() =>{
                 
                     <div
                     style="                      
-                    background-color:white;                                       
+                    background-color:#D8D8D8;                                       
                     border:1px  solid black; 
                     width:30%;
                     height:400px;
@@ -134,6 +134,11 @@ const validarJWT = async() => {
 
     //la respuesta de la petición tiene estos dos valores y los clono
     const {usuario: userDb, token:tokenDB}= await resp.json(); 
+
+    if(!userDb){
+        localStorage.clear();
+        return;
+    }  
     localStorage.setItem('token',tokenDB) //Renuevo el JWT
     usuario=userDb;
     myId=usuario.uid;

@@ -51,6 +51,18 @@ const actualizarCategoria =  async (req, res) =>{
 
 }
 
+const actualizarCategoriaEstado =  async (req, res) =>{
+    console.log('actualizarCategoriaEstado ',req)                     
+    const {id, ...data}=req
+    console.log('la data sería ',data)
+    console.log('lo que guardo es NEW el request ..'.red,id, data, {new:true})   
+    const categoria=await Categoria.findByIdAndUpdate(id, data, {new:true});
+
+    throw new Error('existente')
+    //res.json({msg:'ya existia, lo recuperamos'});
+}
+
+
 
 const crearCategoria= async (req, res=response) => {
 
@@ -104,5 +116,6 @@ module.exports={
     ObtenerCategorias,
     ObtenerCategoria,
     actualizarCategoria,
-    categoriasDelete
+    categoriasDelete,
+    actualizarCategoriaEstado
 }

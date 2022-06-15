@@ -64,6 +64,11 @@ const validarJWT = async() => {
 
     //la respuesta de la petición tiene estos dos valores y los clono
     const {usuario: userDb, token:tokenDB}= await resp.json(); 
+    if(!userDb){
+        localStorage.clear();
+        window.location='index.html' //redireccionamiento
+    }  
+
     localStorage.setItem('token',tokenDB) //Renuevo el JWT
     usuario=userDb;
     myId=usuario.uid;

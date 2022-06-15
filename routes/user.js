@@ -52,7 +52,7 @@ router.post('/',[
 router.delete('/:id',[ 
     validarJWT,                                      //Es la primera que se valida, que el token sea correcto
     //esAdminRole,                                   //Solo un rol permitido
-    tieneRole('USER_ROLE','VENTAS_ROL'),             //Escoger el rol permitido
+    tieneRole('ADMIN_ROLE'),             //Escoger el rol permitido
     check('id','No es un ID válido').isMongoId(),    //Revisa que sea un tipo mongo, no revisa si existe en mongo
     check('id').custom(existeUsuarioId),
     validarCampos                                    //No continua a la ruta si hay un error en los checks

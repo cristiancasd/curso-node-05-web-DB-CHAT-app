@@ -2,6 +2,8 @@ const Role=require('../models/role');
 const Usuario=require('../models/usuario');
 const Categoria=require('../models/categoria');
 const Producto=require('../models/producto');
+const { actualizarProductoEstado } = require('../controllers/productos');
+const { actualizarCategoriaEstado } = require('../controllers/categorias');
 
 require('colors')
 
@@ -49,16 +51,42 @@ const existeCategoria=async(categoria)=>{
   let n=0;
   let cate='0';
 
+  console.log('categoriaDb es ...'.red,categoriaDb)
+
   while (n < (categoriaDb.length) && cate=='0') {
     if(categoriaDb[n].nombre==categoria.toUpperCase()){
       cate=categoria.toUpperCase();
+      if(categoriaDb[n].estado==false){
+        console.log('categoriaDb[n]._id'.red,categoriaDb[n]._id)
+        let    id=categoriaDb[n]._id
+        console.log('id',id)
+        let    restaurantId = id.toString().replace(/ObjectId\("(.*)"\)/, "$1");
+        console.log('restaurantId'.green,restaurantId)
+    
+        let enviar={id:restaurantId, estado:true}
+        await actualizarCategoriaEstado(enviar)
+        
+      }else{
+    
+        throw new Error(`Helper... La categoría ${cate}, ya existe`)   
+      }
+
+      
     } 
     n++;
   }
 
   if(cate!='0'){
-    throw new Error(`Helper... La categoría ${cate}, ya existe`) 
+
+    
+    
   }
+
+  //if(cate!='0'){
+  //  throw new Error(`Helper... La categoría ${cate}, ya existe`) 
+//}
+
+  
 
 
   
@@ -90,12 +118,28 @@ const existeProducto=async(producto)=>{
   console.log('Buscar si ya exite el producto'.yellow, query)
 
   let productoDb = await Producto.findOne(query);
+ 
   console.log('productoDb es'.red, productoDb);
 
   if(productoDb){
     console.log('condicional')
     console.log(`Helper... El producto ${producto}, ya existe`.yellow)
-    throw new Error(`Helper... El producto ${producto}, ya existe`)  
+    console.log('productoDb.estado es ...',productoDb.estado)
+    if(productoDb.estado==false){
+      console.log('productoDb._id'.red,productoDb._id)
+      let    id=productoDb._id
+      console.log('id',id)
+      let    restaurantId = id.toString().replace(/ObjectId\("(.*)"\)/, "$1");
+      console.log('restaurantId'.green,restaurantId)
+
+      let enviar={id:restaurantId, estado:true}
+      await actualizarProductoEstado(enviar)
+      
+    }else{
+
+      throw new Error(`Helper... El producto ${producto}, ya existe`)  
+
+    }
   }
 
   console.log(`Helper... El producto ${producto}, No existe vamos a crearlo`.yellow)

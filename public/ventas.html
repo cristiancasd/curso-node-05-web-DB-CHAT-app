@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADMIN</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+</head>
+<body class="container"  style="background-color: black;">
+
+    <!-- Seleccionar Funcion -->
+    <div class="row mt-5 " style="justify-content: center; ">
+        <div class="col-sm-6" style="justify-content: center">
+
+
+            <form   class="d-grid" >
+                <a href="index.html" class="btn btn-outline-danger">
+                    Volver al Index
+                </a> 
+                <hr>           
+            </form>
+            <br> 
+
+            <form   id='formFuncion' class="d-grid" >
+               
+
+                <select class="selectpicker" id="seleccion" >
+                    <optgroup label="VENTAS">
+                      <option value="tomarPedido" >      Tomar Pedidos</option>
+                      <option value="verPedidos" >       Ver Pedidos </option>
+                      <option value="cancelarPedidos">   Cancelar Pedido </option>
+                    </optgroup>
+
+                </select>
+
+
+                <div id="divEntradasEdicion">
+                    <input 
+                    id="id_user" 
+                    type="text" 
+                    name="id_user" 
+                    class="form-control mb-2" 
+                    placeholder="Escribir ID" 
+                    >
+                    <button id="selectButton"  type="submit" class = "btn btn-primary">Escoger Funcion</button>
+                </div>
+            </form>
+            <h4 id="estoyEn"style="text-align: center; ">Estoy en:</h4>
+        </div>
+    </div>
+
+    <div id="div_tabla_pedidoActual">
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Producto</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">V. Parcial</th>
+            </tr>
+            </thead>
+            <tbody>
+            
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Americano</td>
+                        <td>8</td>
+                        <td>7000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>capuccino</td>
+                        <td>8</td>
+                        <td>7000</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Total</th>
+                        <td></td>
+                        <td></td>
+                        <td>70000</td>
+                    </tr>
+        </tbody>
+        </table>
+    </div>
+    
+    <!-- ver categorias y productos -->
+    <div class="row mt-5" style="justify-content:center;" id="divCateProd" >
+        <div class="row mt-5" style="justify-content: center" >
+            <div  style=" background-color: black" >
+                
+                <h2>Categorias</h2>
+                <hr>
+                <br>
+                <ul id="categoriasTodas" style="border:1px solid white;
+                overflow:hidden;
+                text-align: center; "> 
+                    
+                </ul>
+                <br>
+                <br>
+                <button id="montarPedido"  onclick="montarPedido()"  type="button" class = "btn btn-primary btn-lg btn-block">Montar Pedido</button>
+
+                <br>
+                <h2>Productos</h2>
+                <hr>
+
+                <section id="cateProductos" 
+                        style="border:1px solid white;
+                               overflow:hidden;
+                               text-align: center; 
+                       " >                     
+                </section>
+                 
+            </div>
+        </div>
+    </div>
+
+   
+
+  
+
+
+    <script src="./js/ventas.js"></script> 
+
+</body>
+</html>

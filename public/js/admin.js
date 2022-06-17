@@ -235,7 +235,7 @@ const parametrosIniciales=async(accion)=>{
 
             divEditarProductos.style.display='block';
             
-            divEditarProductos.style.backgroundColor='black';
+            //divEditarProductos.style.backgroundColor='black';
             //verDivSelectUsuarios.style.display='block';
             divProducto.style.display='block';
             estoyEn.innerHTML= 'CREAR NUEVO PRODUCTO';
@@ -536,7 +536,7 @@ const mostrarBusqueda=async(arreglo,buscar)=>{
                 console.log('estoy en buscar productos');
 
                 (valor.img)
-                    ? imagen=data.img                     
+                    ? imagen=valor.img                     
                     : imagen='/js/goku.png';
                     
                 (valor.disponible)
@@ -685,11 +685,16 @@ const mostrarCP = async() =>{
     const resp2 = await fetch(enlaceProducto,{});
     const {total:totalP, productos}= await resp2.json(); 
 
+    categorias.push({'nombre':'OTROS'});
     let cateHtml='';
     let cateProdHtml='';
     let arregloCate=[];
     let arregloCateObj={};
+    //let arregloCate=['OTROS'];
+    //let arregloCateObj={'OTROS':[]};
 
+    
+    
     categorias.forEach(({nombre})=>{
         arregloCate.push(nombre);
         arregloCateObj[nombre]=[]        
@@ -702,14 +707,26 @@ const mostrarCP = async() =>{
         `
     })
 
+  
+    let h=0;
     //Separo productos por categoria
     productos.forEach((data)=>{
+        h=0;
+        
         arregloCate.forEach((valor,i)=>{
-            if(valor==data.categoria.nombre){
-                arregloCateObj[valor].push(data)
+
+            if(data.categoria){ //Si se ha borrado la categoría esta es null
+                if(valor==data.categoria.nombre){
+                    arregloCateObj[valor].push(data)
+                    h=1;
+                }
             }
         })
+        if(h==0){
+            arregloCateObj['OTROS'].push(data)
+        }
     })
+
 
     let imgProducto='';
     let disponibleP='';
@@ -1283,7 +1300,7 @@ divCategoria.addEventListener("change", async ev=>{
         id_user.value=cateObj[divCategoria.value];
         categoria.value=divCategoria.value
     } 
-})  
+})
 
 //Select de producto
 divProducto.addEventListener("change", async ev=>{
@@ -1296,7 +1313,11 @@ divProducto.addEventListener("change", async ev=>{
         disponible.value=       prodObj[divProducto.value].disponible;
         descripcion.value=      prodObj[divProducto.value].descripcion;
         precio.value=      prodObj[divProducto.value].precio;
-        divCategoria.value=      prodObj[divProducto.value].categoria.nombre;
+        try{
+            divCategoria.value=      prodObj[divProducto.value].categoria.nombre;
+        }catch{
+
+        }
     } 
 })  
 

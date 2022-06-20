@@ -89,6 +89,12 @@ formSubirImagen.addEventListener('submit', ev=>{
         upload_button.style.color= '#3d3d3d';
         fotoUser.src=response.img
 
+        setTimeout(function(){
+            console.log('estoy en el temporizador')
+            upload_button.style.backgroundColor= "blue";    
+            upload_button.style.color= 'white';
+            }, 1200);
+
         console.log('Success:', response.img)
     })
     .catch(error =>  console.warn(error))
@@ -103,31 +109,46 @@ formCambiarDatos.addEventListener('submit', ev=>{
     ev.preventDefault();        //No recargar página    
     const formData={};          //Creo un arreglo con los elementos del formulario
 
-    if(password.value!=password2.value|| password.value.length<=5){
+    if((password.value!=password2.value|| password.value.length<=5) && !usuario.google ){
         
         (password.value.length<=5)
             ? window.alert('Debe tener mínimo 6 caracteres')
             : window.alert('Las contraseñas no son iguales')
     }else{
-        for(let el of formCambiarDatos.elements){
-            if(el.name.length>0) 
-            formData[el.name]=el.value
-        } 
+        //for(let el of formCambiarDatos.elements){
+        //    if(el.name.length>0) 
+        //    formData[el.name]=el.value
+        //} 
+        formData['nombre']=nombre.value;
+        if (!usuario.google) formData['pasword']=password.value;
         formData['rol']=usuario.rol;
+
+        console.log('formData es',formData)
         
+
         fetch(enlaceEditar+usuario.uid,{
             method: 'PUT',
             body: JSON.stringify(formData),//Contiene correo y password
-            headers:{'Content-Type':'application/json'}
+            headers:{
+                        'Content-Type':'application/json',
+                        'c-token':localStorage.getItem('token')
+        }
         })
         .then(resp =>resp.json()) //Extraemos el .json
-        .then( ({usuario})=>{
-            if(!usuario.nombre){
+        .then( (resp)=>{
+            console.log('resp es ...',resp)
+            if(!resp.usuario.nombre){
                 return console.error('error');
             }
-            document.title='editando'+usuario.nombre
+            document.title='editando'+resp.usuario.nombre
             change_button.style.backgroundColor= "#89ff5c";    
             change_button.style.color= '#3d3d3d';
+            setTimeout(function(){
+                console.log('estoy en el temporizador')
+                change_button.style.backgroundColor= "blue";    
+                change_button.style.color= 'white';
+                }, 1200);
+
         })
         .catch(err=>{
             console.log(err)

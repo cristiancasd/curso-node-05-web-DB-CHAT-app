@@ -182,6 +182,10 @@ const parametrosIniciales=async(accion)=>{
             usarContraseña.style.display ='none'; 
             change_button.innerHTML='Crear Usuario';
 
+            password.disabled=false;
+            password2.disabled=false;
+            correo.disabled=false;
+
             await actualizarusuarios()
 
             if(seleccion.value=='editarUser'||seleccion.value=='eliminarUser'){
@@ -518,11 +522,11 @@ const mostrarBusqueda=async(arreglo,buscar)=>{
             busquedaHtml+=` <div class="d-grid" style="justify-content: center" >
                         <h5 >${valor.nombre}</h5> 
                         <img src="${imagen}" width="200" height="200" style="margin: 0 auto;"> 
-                        <p>Correo: $${valor.correo}</p>
-                        <p>estado: $${valor.estado}</p>
-                        <p>uid: $${valor.uid}</p>
-                        <p>rol: $${valor.rol}</p>
-                        <p>google: $${valor.google}</p>
+                        <p>Correo: ${valor.correo}</p>
+                        <p>estado: ${valor.estado}</p>
+                        <p>uid: ${valor.uid}</p>
+                        <p>rol: ${valor.rol}</p>
+                        <p>google: ${valor.google}</p>
                     </div>
                 </div>                        
         `
@@ -653,11 +657,11 @@ const mostrar=async()=>{
                         <div class="d-grid" style="justify-content: center" >
                             <h5 >${data.nombre}</h5> 
                             <img src="${imgProducto}" width="200" height="200" style="margin: 0 auto;"> 
-                            <p>Correo: $${data.correo}</p>
-                            <p>estado: $${data.estado}</p>
-                            <p>uid: $${data.uid}</p>
-                            <p>rol: $${data.rol}</p>
-                            <p>google: $${data.google}</p>
+                            <p>Correo: ${data.correo}</p>
+                            <p>estado: ${data.estado}</p>
+                            <p>uid: ${data.uid}</p>
+                            <p>rol: ${data.rol}</p>
+                            <p>google: ${data.google}</p>
 
                                                   
                         
@@ -889,6 +893,26 @@ const crearEditarUsuario=async (accion,id_editar)=>{
         console.log('la respuesta de la petición es');
         console.log(resp)
         if(!resp.nombre&&!resp.usuario){
+
+
+            if(crud=='POST'){
+                //if(!resp.nombre&&!resp.producto ){ 
+                if(!resp.nombre){ 
+                    console.log('entre al condicional del error')
+                    console.log('resp.errors[0]',resp.errors[0])
+                    console.log('resp.errors[0].msg',resp.errors[0].msg)
+                    
+                    if(resp.errors[0].msg=='existente'){ //lo hago en el backend
+                        //await actualizarProductos();
+                        parametrosIniciales(accion);
+                        console.error('restaurado');
+                        window.alert(` ${formData['nombre']} ya existía, fue restaurado con datos anteriores`);
+                        return;
+                    }
+                    return console.error('error');
+                } 
+            }
+            
             return console.error('error');
         } 
         //divFormDatos.style.display ='none';
@@ -934,7 +958,6 @@ const crearEditarUsuario=async (accion,id_editar)=>{
         console.log(err) 
     })
 }
-
 
 
 
@@ -1224,8 +1247,6 @@ formBuscar.addEventListener('submit',  async (ev)=>{
         console.log(err) 
     })
 })
-
-
 
 
 

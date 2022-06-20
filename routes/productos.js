@@ -21,7 +21,8 @@ ObtenerProductoID);
 //Crear Producto - Validar token, nombre obligatorio, categoria obligatoria
 //categoriaOk, not existeProducto
 router.post('/',[
-    validarJWT,    
+    validarJWT,  
+    esAdminRole,  
     check('nombre','EL nombre es obligatorio').not().isEmpty(),
     check('categoria','la categoria es obligatorio').not().isEmpty(),
     check('categoria').custom(categoriaOK),
@@ -31,7 +32,8 @@ router.post('/',[
 
 //Actualizar - validar token, nombre obligatorio, ID mongo, que exista el id
 router.put('/:id',[
-    validarJWT,    
+    validarJWT,  
+    esAdminRole,  
     check('nombre','el nomre es obligatario').not().isEmpty(),
     check('id','No es un ID válido').isMongoId(),
     check('id').custom(existeProductoPorID), 

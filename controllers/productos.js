@@ -6,8 +6,8 @@ const Categoria = require('../models/categoria');
 require('colors')
 
 
-//Obtengo todas las categorias
-// ObtenerCategorias - paginado - total -poputale
+//Obtengo todas los productos
+// ObtenerProductos - paginado - total -poputale
 const ObtenerProductos=async (req, res=response) => {
 
     const {limite=115, desde=0}=req.query;
@@ -29,18 +29,18 @@ const ObtenerProductos=async (req, res=response) => {
     })
 }
 
-// obtenerCategoria por id- populate{}
+// ObtenerProductoID por id- populate{}
 const ObtenerProductoID=async(req, res=response) =>{
     const {id}=req.params;
     const producto=await Producto.findById(id).populate('usuario','nombre')
     res.json(producto);
 }
 
-//actualizarCategoria
+//actualizarProducto
 const actualizarProducto =  async (req, res) =>{
     console.log('recibo el request ..',req.params)                                                     
     const {id}=req.params;                     //Obtengo el ID del enlace, ya está validado
-    const {estado, usuario, ...data}=req.body; //No piodemos actualizar el esatado ni el usuario. Solo la categoría                                                          
+    const {estado, usuario, ...data}=req.body; //No podemos actualizar el esatado ni el usuario. Solo la categoría                                                          
     
     data.nombre=data.nombre.toUpperCase();     //Nombre de la categoría en mayusculas
     data.usuario=req.usuario._id;              //Actualizo la categoría de dicho ID

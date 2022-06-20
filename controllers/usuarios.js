@@ -49,6 +49,17 @@ const usuariosPut =  async (req, res) =>{
     });
 }
 
+const actualizarUsuarioEstado =  async (req, res) =>{
+    console.log('actualizarUsuarioEstado ',req)                     
+    const {id, ...data}=req
+    console.log('la data sería ',data)
+    console.log('lo que guardo es NEW el request ..'.red,id, data, {new:true})   
+    const usuario=await Usuario.findByIdAndUpdate(id, data, {new:true});
+
+    throw new Error('existente')
+    //res.json({msg:'ya existia, lo recuperamos'});
+}
+
 const usuariosPost = async (req, res) =>{
 
     //Es ineficiente tener que pegar este códigp en todo lado para 
@@ -117,5 +128,6 @@ module.exports={
     usuariosGet,
     usuariosPut,
     usuariosPost,
-    usuariosDelete
+    usuariosDelete,
+    actualizarUsuarioEstado
 }

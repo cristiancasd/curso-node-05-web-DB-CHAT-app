@@ -1,9 +1,13 @@
 const Role=require('../models/role');
 const Usuario=require('../models/usuario');
+const Venta=require('../models/venta');
+
 const Categoria=require('../models/categoria');
 const Producto=require('../models/producto');
 const { actualizarProductoEstado } = require('../controllers/productos');
 const { actualizarCategoriaEstado } = require('../controllers/categorias');
+const { actualizarUsuarioEstado } = require('../controllers/usuarios');
+
 
 require('colors')
 
@@ -13,13 +17,28 @@ const esRoleValido=async(rol='')=>{
         throw new Error(' El rol no está registrado en la BD')
     }
 }
+
+
+
 const emailExiste=async(correo='')=>{
     //Comprobar si el correo existe
   const existeEmail=await Usuario.findOne({correo});
   console.log('correo ----'.green,correo);
   console.log('existeEmail ----'.green,existeEmail)
   if(existeEmail){
-    throw new Error('Ya se está usando el correo')
+
+    if(existeEmail.estado){
+      throw new Error('Ya se está usando el correo')
+    }else{
+      console.log('existeEmail._id'.red,existeEmail._id)
+        let    id=existeEmail._id
+        console.log('id',id)
+        let    restaurantId = id.toString().replace(/ObjectId\("(.*)"\)/, "$1");
+        console.log('restaurantId'.green,restaurantId)
+    
+        let enviar={id:restaurantId, estado:true}
+        await actualizarUsuarioEstado(enviar)
+    }
   }
 }
 const existeUsuarioId=async(id)=>{
@@ -177,7 +196,7 @@ const existeProductoPorID=async(id)=>{
   if (!existeProd){
     throw new Error('El id no existe en la base de datos')
   }
-}
+} 
 
 const coleccionesPermitidas=(coleccion='',colecciones=[])=>{
   console.log('estoy en coleccionesPermitidas')
@@ -186,6 +205,23 @@ const coleccionesPermitidas=(coleccion='',colecciones=[])=>{
     throw new Error(`La coleccion ${coleccion} no es permitida, ${colecciones}`)
   }
   return true;
+}
+
+
+const diaExiste=async(dia='')=>{
+  //Comprobar si el correo existe
+  const existeDia=await Venta.findOne({dia});
+  console.log('Dia ----'.green,dia);
+  console.log('existeDia----'.green,existeDia)
+  if(existeDia){
+    throw new Error('Ya se hay un arreglo-día guardado')
+  }
+}
+const existeVentaId=async(id)=> {
+  const existeVenta = await Venta.findById(id);
+  if (!existeVenta){
+    throw new Error('El id no existe en la base de datos')
+  }
 }
 
 module.exports={
@@ -197,5 +233,7 @@ module.exports={
     categoriaOK,
     existeProducto,
     existeProductoPorID,
-    coleccionesPermitidas
+    coleccionesPermitidas,
+    diaExiste,
+    existeVentaId
 }

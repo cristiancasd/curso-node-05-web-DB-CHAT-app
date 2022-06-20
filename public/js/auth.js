@@ -71,7 +71,7 @@ const mostrar = async() =>{
                 ? imgProducto=data.img                     
                 : imgProducto='/js/goku.png';
 
-            (data.disponible)
+            (data.disponible=='true')
                 ? disponibleP='Disponible: SI'                     
                 : disponibleP='Disponible: NO';
 

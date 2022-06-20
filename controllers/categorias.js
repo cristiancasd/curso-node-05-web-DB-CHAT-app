@@ -110,7 +110,7 @@ const categoriasDelete = async (req, res) =>{
     const categoria=await Categoria.findByIdAndUpdate(id,{estado:false}) 
     res.json({categoria,usuarioAutenticado});
 }
-
+ 
 module.exports={
     crearCategoria,
     ObtenerCategorias,

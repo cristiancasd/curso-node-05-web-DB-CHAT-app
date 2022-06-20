@@ -21,7 +21,8 @@ ObtenerCategoria);
 
 //Validar token, nombre obligatorio, existencia categoria.
 router.post('/',[
-    validarJWT,    
+    validarJWT,
+    esAdminRole,    
     check('nombre','EL nombre es obligatorio').not().isEmpty(),
     check('nombre').custom(existeCategoria),
     validarCampos
@@ -30,6 +31,7 @@ router.post('/',[
 //Validar token, nombre obligatorio, ID mongo, existencia de ID.
 router.put('/:id',[
     validarJWT,
+    esAdminRole,
     check('id').custom(existeCategoriaPorID), 
     check('nombre','el nomre es obligatario').not().isEmpty(),
     check('id','No es un ID válido').isMongoId(),

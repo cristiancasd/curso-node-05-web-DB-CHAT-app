@@ -30,6 +30,7 @@ router.get('/', usuariosGet);                               //Solicitud para mos
 
 
 router.put('/:id',[
+    validarJWT, 
     check('id','No es un ID válido').isMongoId(),        //Revisa que sea un tipo mongo, no revisa si existe en mongo
     check('id').custom(existeUsuarioId),                 //Ejecuto función verificar existencia del usuario
     check('rol').custom(esRoleValido),                   //Verificar un rol permitido

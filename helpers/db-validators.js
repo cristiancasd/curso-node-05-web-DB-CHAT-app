@@ -18,8 +18,6 @@ const esRoleValido=async(rol='')=>{
     }
 }
 
-
-
 const emailExiste=async(correo='')=>{
     //Comprobar si el correo existe
   const existeEmail=await Usuario.findOne({correo});

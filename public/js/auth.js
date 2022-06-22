@@ -81,7 +81,8 @@ const mostrar = async() =>{
                     style="                      
                     background-color:#D8D8D8;                                       
                     border:1px  solid black; 
-                    width:30%;
+                    width: 30%;
+                    min-width: 200px;
                     height:400px;
                     margin:0px auto;
                     float:left;

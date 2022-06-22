@@ -54,8 +54,6 @@ const actualizarProducto =  async (req, res) =>{
 
 }
 
-
-
 const actualizarProductoEstado =  async (req, res) =>{
     console.log('actualizarProductoEstado ',req)                     
     const {id, ...data}=req
@@ -66,8 +64,6 @@ const actualizarProductoEstado =  async (req, res) =>{
     throw new Error('existente')
     //res.json({msg:'ya existia, lo recuperamos'});
 }
-
-
 
 const crearProducto= async (req, res=response) => {
 

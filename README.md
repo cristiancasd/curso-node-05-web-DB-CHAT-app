@@ -27,3 +27,10 @@
 ## Sala de Chat,  enviar mensajes a todos y en privado
 ## conocer usuarios conectados
 ## cargar ultimos 10 chats
+
+# FRONT
+### Index: Solicitar productos y categorias en DB, autenticación de usuario
+### Chat: Todos los usuarios pueden entrar a la app de chat
+### Ventas: Solo los roles admin y ventas, creación de pedidos, guardarlos y editarlos en la db
+### Admin: Crear, editar, eliminar db (productos-categorias-usuarios)
+

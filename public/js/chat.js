@@ -1,4 +1,18 @@
-
+/** ----------------------------- APP CHAT --------------------------------------
+ * 
+ * Cualquier usuario autenticado puede usar el chat.
+ * 
+ * Se usan sockets para recibir mensajes y notificaciones en tiempo real
+ * 
+ * Puedes enviar mensajes a la sala general, crear una sala aparte y enviar mensajes por ahí
+ * Estos mensajes en la sala general y salas aparte quedan guardados en el backend (10 mensajes)
+ * 
+ * Puedes enviar y recibir mensajes privados (los mensajes recibidos se borraran si reinicias la página)
+ * 
+ * Cualquier usuario puede editar su nombre, contraseña y foto de perfil.
+ * Otras ediciones están validadas tanto en el front como en el back
+ * 
+ */
 
 let usuario = null;
 let socket  = null;
@@ -41,7 +55,7 @@ if (!searchParams.has('salaCHAT')){
 
 
 
-console.log('salat es ',salat)
+console.log('sala es ',salat)
 
 
 
@@ -161,7 +175,7 @@ const  dibujarUsuarios=async(usuarios=[])=>{
             imgPerfil='/js/goku.png'
         } 
 
-        console.log('la imagen de ',usuario.nombre,' es ',imgPerfil)
+        //console.log('la imagen de ',usuario.nombre,' es ',imgPerfil)
         
         //if (sal==sala.value){
         if (sal==salat){

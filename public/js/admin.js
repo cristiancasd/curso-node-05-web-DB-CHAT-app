@@ -1,3 +1,15 @@
+/** ----------------------------- Funciones ADMIN --------------------------------------
+ * 
+ * Validación JWT - Solo Admin - validación en front y en back
+ * 
+ * Editar productos:  Crear, eliminar, editar (nombre, foto, disponibilidad, precio)
+ * Editar categorias: Crear, eliminar, editar (nombre)
+ * Editar usuarios:   Crear, eliminar, editar (nombre, contraseña, rol, fotos)
+ * 
+ * 
+ */
+
+
 
 let usuario = null;
 
@@ -105,8 +117,8 @@ let usuarioEdit={}
 // Validar el JWT en el frontEND
 const validarJWT = async() => {
 
-    console.log('el select es -..',seleccion.value)
-    console.log('voy a validar token')
+    //console.log('el select es -..',seleccion.value)
+    //console.log('voy a validar token')
     //Traemos el token de localStorage
     const token = localStorage.getItem('token')||'';
 
@@ -146,7 +158,7 @@ const parametrosIniciales=async(accion)=>{
     
     
     
-    console.log('addEventListener',seleccion.value)
+    //console.log('addEventListener',seleccion.value)
     switch(accion){
         
         case 'nuevoUser'  :
@@ -297,8 +309,8 @@ const parametrosIniciales=async(accion)=>{
                 categoria.required=false;
         
                 
-                console.log('prodObj[divProducto.value] ..',prodObj[divProducto.value])
-                console.log('img..',prodObj[divProducto.value].img)
+                //console.log('prodObj[divProducto.value] ..',prodObj[divProducto.value])
+                //console.log('img..',prodObj[divProducto.value].img)
                 
                 
                 
@@ -484,8 +496,8 @@ seleccion.addEventListener("change", async ev=>{
 
 const mostrarBusqueda=async(arreglo,buscar)=>{
     
-    console.log('arreglo que llega',arreglo)
-    console.log('buscar que llega',buscar)
+    //('arreglo que llega',arreglo)
+    //console.log('buscar que llega',buscar)
 
     divMostrarBusqueda.style.display='block';
 
@@ -496,7 +508,7 @@ const mostrarBusqueda=async(arreglo,buscar)=>{
     busquedaHtml=''
     arreglo.forEach((valor,i)=>{
 
-        console.log('valor del for ..',valor)
+        //console.log('valor del for ..',valor)
         busquedaHtml+=`          
                 
         <div
@@ -504,6 +516,8 @@ const mostrarBusqueda=async(arreglo,buscar)=>{
         background-color:white;                                       
         border:1px  solid black; 
         width:30%;
+        min-width: 200px;
+
         height:500px;
         margin:0px auto;
         float:left;
@@ -514,7 +528,7 @@ const mostrarBusqueda=async(arreglo,buscar)=>{
         
         if( buscar=='/api/buscar/usuarios/'  ){
                 
-            console.log('estoy en buscar ususarios');
+            //console.log('estoy en buscar ususarios');
             (valor.img)
                 ? imagen=valor.img                     
                 : imagen='/js/goku.png';
@@ -537,7 +551,7 @@ const mostrarBusqueda=async(arreglo,buscar)=>{
                 
 
 
-                console.log('estoy en buscar productos');
+                //console.log('estoy en buscar productos');
 
                 (valor.img)
                     ? imagen=valor.img                     
@@ -564,7 +578,7 @@ const mostrarBusqueda=async(arreglo,buscar)=>{
 
         if( buscar=='/api/buscar/categorias/'){
                 
-            console.log('estoy en buscar categorias');
+            //console.log('estoy en buscar categorias');
 
             busquedaHtml+=` <div class="d-grid" style="justify-content: center" >
                         <h5 >${valor.nombre}</h5> 
@@ -576,7 +590,7 @@ const mostrarBusqueda=async(arreglo,buscar)=>{
         }
       
     })
-    console.log('arreglo.length',arreglo.length);
+    //console.log('arreglo.length',arreglo.length);
     (arreglo.length!=0)
         ? resultadoBusqueda.innerHTML=busquedaHtml
         : resultadoBusqueda.innerHTML=`<h5 >No hay resultados en la busqueda</h5> ` ;
@@ -584,6 +598,7 @@ const mostrarBusqueda=async(arreglo,buscar)=>{
 
 
 }
+
 const mostrar=async()=>{
     const resp = await fetch(enlaceEditar,{});
     const {usuarios}= await resp.json(); 
@@ -610,7 +625,7 @@ const mostrar=async()=>{
         })
     })
 
-    console.log('arregloRolObj',arregloRolObj)
+    //console.log('arregloRolObj',arregloRolObj)
 
     noRoles.innerHTML=rolHtml;
 
@@ -647,6 +662,8 @@ const mostrar=async()=>{
                     background-color:white;                                       
                     border:1px  solid black; 
                     width:30%;
+                    min-width: 200px;
+
                     height:500px;
                     margin:0px auto;
                     float:left;
@@ -680,6 +697,7 @@ const mostrar=async()=>{
 
 
 }
+
 const mostrarCP = async() =>{
 
 
@@ -764,6 +782,8 @@ const mostrarCP = async() =>{
                     background-color:white;                                       
                     border:1px  solid black; 
                     width:30%;
+                    min-width: 200px;
+
                     height:400px;
                     margin:0px auto;
                     float:left;
@@ -812,7 +832,7 @@ formCambiarDatos.addEventListener('submit', ev=>{
                     ? window.alert('Debe tener mínimo 6 caracteres')
                     : window.alert('Las contraseñas no son iguales')
             }else{
-                console.log('voy a entrar a editarUsuario')
+                //console.log('voy a entrar a editarUsuario')
                 crearEditarUsuario(funcionActual,id_user.value);           
             }   
         }else{
@@ -827,7 +847,7 @@ formCambiarDatos.addEventListener('submit', ev=>{
                 ? window.alert('Debe tener mínimo 6 caracteres')
                 : window.alert('Las contraseñas no son iguales')
         }else{
-            console.log('voy a entrar a editarUsuario')
+            //console.log('voy a entrar a editarUsuario')
             crearEditarUsuario(funcionActual,id_user.value);           
         }
 
@@ -877,8 +897,8 @@ const crearEditarUsuario=async (accion,id_editar)=>{
     }
 
        
-    console.log('formData es ',formData)
-    console.log('el enlace es ',enlace)
+    //console.log('formData es ',formData)
+    //console.log('el enlace es ',enlace)
     
     await fetch(enlace,{
         method: crud,
@@ -890,17 +910,17 @@ const crearEditarUsuario=async (accion,id_editar)=>{
     })
     .then(resp =>resp.json()) //Extraemos el .json
     .then( async (resp)=> {
-        console.log('la respuesta de la petición es');
-        console.log(resp)
+        //console.log('la respuesta de la petición es');
+        //console.log(resp)
         if(!resp.nombre&&!resp.usuario){
 
 
             if(crud=='POST'){
                 //if(!resp.nombre&&!resp.producto ){ 
                 if(!resp.nombre){ 
-                    console.log('entre al condicional del error')
-                    console.log('resp.errors[0]',resp.errors[0])
-                    console.log('resp.errors[0].msg',resp.errors[0].msg)
+                    //console.log('entre al condicional del error')
+                    //console.log('resp.errors[0]',resp.errors[0])
+                    //console.log('resp.errors[0].msg',resp.errors[0].msg)
                     
                     if(resp.errors[0].msg=='existente'){ //lo hago en el backend
                         //await actualizarProductos();
@@ -918,9 +938,9 @@ const crearEditarUsuario=async (accion,id_editar)=>{
         //divFormDatos.style.display ='none';
         //divFormImg.style.display='block';
         
-        console.log('crud es ',crud)
+        //console.log('crud es ',crud)
         if(crud=='DELETE'){
-            console.log('resp.usuario',resp.usuario);
+            //console.log('resp.usuario',resp.usuario);
             id_user.value='';        
             change_button.style.backgroundColor= "red";    
             change_button.style.color= '#3d3d3d';
@@ -933,7 +953,7 @@ const crearEditarUsuario=async (accion,id_editar)=>{
         
 
         setTimeout(function(){
-            console.log('estoy en el temporizador')
+            //console.log('estoy en el temporizador')
             change_button.style.backgroundColor= "blue";    
             change_button.style.color= 'white';
             }, 1200);
@@ -993,7 +1013,7 @@ formSubirImagen.addEventListener('submit', ev=>{
         }
         
 
-        console.log('Success:', response.img)
+        //console.log('Success:', response.img)
     })
     .catch(error =>  console.warn(error))
     //.then(response => console.log('Success:', response))
@@ -1016,7 +1036,7 @@ formSubirImagenP.addEventListener('submit', ev=>{
     .then(response=>{ //Grabo el token en localstorage
         
         if(!response.img){
-            console.log('está super malo todo')
+            //console.log('está super malo todo')
             return console.error(data.msg);
         }
 
@@ -1027,7 +1047,7 @@ formSubirImagenP.addEventListener('submit', ev=>{
 
             setTimeout(function(){               
                 
-                    console.log('estoy en el temporizador')
+                    //console.log('estoy en el temporizador')
                     upload_buttonP.style.backgroundColor= "blue";    
                     upload_buttonP.style.color= 'white';
                     if(funcionActual=='nuevoProd') parametrosIniciales(seleccion.value) ;//parametrosProducto();   
@@ -1041,7 +1061,7 @@ formSubirImagenP.addEventListener('submit', ev=>{
         }
         
 
-        console.log('Success:', response.img)
+        //console.log('Success:', response.img)
     })
     .catch(error =>  console.warn(error))
     //.then(response => console.log('Success:', response))
@@ -1050,12 +1070,10 @@ formSubirImagenP.addEventListener('submit', ev=>{
 })
 
 
-
-
 //************************************ Crear EDITAR User, Prod, Catg ******************************************************** */
 
 formCambiarDatosP.addEventListener('submit', ev=>{
-    console.log('Submit ... valor de funcionActual= ',funcionActual)
+    //console.log('Submit ... valor de funcionActual= ',funcionActual)
     ev.preventDefault();        //No recargar página    
     crearCateProd(funcionActual, id_user.value); 
 })
@@ -1109,9 +1127,9 @@ const crearCateProd=async (accion,id_editar)=>{
     }
 
        
-    console.log('formData es ',formData)
-    console.log('el enlace es ',enlace)
-    console.log('eCRUD es ',crud)
+    //console.log('formData es ',formData)
+    //console.log('el enlace es ',enlace)
+    //console.log('eCRUD es ',crud)
     
     await fetch(enlace,{
         method: crud,
@@ -1123,16 +1141,16 @@ const crearCateProd=async (accion,id_editar)=>{
     })
     .then(resp =>resp.json()) //Extraemos el .json
     .then( async (resp)=>{
-        console.log('la respuesta es');
-        console.log(resp)
+        //console.log('la respuesta es');
+        //console.log(resp)
         
         
         if(crud=='POST'){
             //if(!resp.nombre&&!resp.producto ){ 
             if(!resp.nombre){ 
-                console.log('entre al condicional del error')
-                console.log('resp.errors[0]',resp.errors[0])
-                console.log('resp.errors[0].msg',resp.errors[0].msg)
+                //console.log('entre al condicional del error')
+                //console.log('resp.errors[0]',resp.errors[0])
+                //console.log('resp.errors[0].msg',resp.errors[0].msg)
                 
                 if(resp.errors[0].msg=='existente'){ //lo hago en el backend
                     //await actualizarProductos();
@@ -1162,7 +1180,7 @@ const crearCateProd=async (accion,id_editar)=>{
         
 
         setTimeout(function(){
-            console.log('estoy en el temporizador')
+            //console.log('estoy en el temporizador')
             change_buttonP.style.backgroundColor= "blue";    
             change_buttonP.style.color= 'white';
             }, 1200);
@@ -1193,8 +1211,6 @@ const crearCateProd=async (accion,id_editar)=>{
 
 
 
-
-
 //***************************************   BUSCAR   ********************************************************* */
 formBuscar.addEventListener('submit',  async (ev)=>{
     ev.preventDefault();//permite cancelar el evento sin detener el funcionamiento  
@@ -1208,8 +1224,8 @@ formBuscar.addEventListener('submit',  async (ev)=>{
     
 
        
-    console.log('formData es ',formData)
-    console.log('el enlace es ',enlace)
+    //console.log('formData es ',formData)
+    //console.log('el enlace es ',enlace)
     
     await fetch(enlace ,{
         method: crud,
@@ -1221,15 +1237,15 @@ formBuscar.addEventListener('submit',  async (ev)=>{
     })
     .then(resp =>resp.json()) //Extraemos el .json
     .then( async (resp)=> {
-        console.log('la respuesta de la petición es');
-        console.log(resp.results)
+        //console.log('la respuesta de la petición es');
+        //console.log(resp.results)
         if(!resp.results){
             return console.error('error');
         } 
         //divFormDatos.style.display ='none';
         //divFormImg.style.display='block';
         
-        console.log('crud es ',crud)
+        //console.log('crud es ',crud)
         
         button_search.style.backgroundColor= "#89ff5c";    
         button_search.style.color= '#3d3d3d';
@@ -1237,7 +1253,7 @@ formBuscar.addEventListener('submit',  async (ev)=>{
 
 
         setTimeout(function(){
-            console.log('estoy en el temporizador')
+            //console.log('estoy en el temporizador')
             button_search.style.backgroundColor= "blue";    
             button_search.style.color= 'white';
             }, 1200);       
@@ -1247,6 +1263,7 @@ formBuscar.addEventListener('submit',  async (ev)=>{
         console.log(err) 
     })
 })
+
 
 
 
@@ -1268,7 +1285,7 @@ const actualizarusuarios=async ()=>{
 }
 let cateObj={}
 const actualizarCategorias=async ()=>{
-    console.log('estoy en actualizarCategorias')
+    //console.log('estoy en actualizarCategorias')
     const resp = await fetch(enlaceCategoria,{});
     
     const {categorias}= await resp.json(); 
@@ -1289,7 +1306,7 @@ const actualizarCategorias=async ()=>{
 let prodObj={}
 const actualizarProductos=async ()=>{
 
-    console.log(' estoy en actualizarProductos')
+    //console.log(' estoy en actualizarProductos')
     const resp = await fetch(enlaceProducto,{});
     
     const {productos}= await resp.json(); 
@@ -1362,7 +1379,7 @@ divSelectUsuarios.addEventListener("change", async ev=>{
 })  
 //Escoger cambiar la contraseña del usuario
 usarContraseña.addEventListener("change", ev=>{
-    console.log('usarContraseña es ..,.',usarContraseña.checked)
+    //console.log('usarContraseña es ..,.',usarContraseña.checked)
     
     if(usarContraseña.checked){
         password.required=true;

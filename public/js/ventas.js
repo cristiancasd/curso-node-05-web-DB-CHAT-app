@@ -1,5 +1,21 @@
 
 
+/** ----------------------------- APP gestor de ventas --------------------------------------
+ * 
+ * Los datos de los productos se encuentra en una base de datos, si estás autenticado con
+ * el rol correcto te permite usar la app y hacer  las peticiones al back
+ * 
+ * La interfaz permite agregar la cantidad de productos que deseas y te dice el precio final
+ * al montar el pedido, este se guarda en la base de datos y puedes proceder a hacer otro pedido
+ * 
+ * Puedes ver los pedidos generados y también marcarlos como anulados. 
+ * 
+ * Cada venta guarda el id del usuario que la generó
+ * 
+ * Si un usuario anula o reactiva una venta se le registra el id y se ve en la interfaz
+ * 
+ */
+
 const div_tabla_pedidoActual = document.querySelector(`#div_tabla_pedidoActual`);
 const button_montarPedido = document.querySelector(`#button_montarPedido`);
 
@@ -8,21 +24,33 @@ let usuario = null;
 const enlace            =   '/api/auth/' 
 const enlaceCategoria   =   '/api/categorias/'  
 const enlaceProducto    =   '/api/productos/'  
-const enlaceVentas    =   '/api/ventas/'  
+const enlaceVentas      =   '/api/ventas/'  
+
+
+const d=new Date()          //Día de hoy
+let diaHoy=d.getDate()+'-'+(Number(d.getMonth())+1 ) +'-'+ d.getFullYear()
+
+let mostrarPedidosHoy=[]    //Arreglo con los pedidios de hoy
+let pedidosHoy=[]           //Arreglo con los pedidios de hoy
+let pedidoActualObj={}      //Objeto con información del pedido actual(temporal) generado
+let valorTotal=0;           //Valor total $ del pedido actual(temporal) generado
 
 
 
+let ventas=[]               //Arreglo de obejos de días (cada día contiene dia, arregloVentas, estado, id)
+let pedidosObj={}           //Objeto de pedidos con indice de id
+let pedidosFecha={}         //Objeto de pedidos con indice de fecha
 
-var nombre_imagen='';
 
-let funcionActual='';
-let usuarioEdit={}
+let prodObj={}              //Objeto con indice de nombre de productos
+let prod_idObj={}           //Objeto con indice de id de producto
+let cateObj={}              //Objeto con indice de nombre de categoría
+
+
 
 // Validar el JWT en el frontEND
 const validarJWT = async() => {
 
-    console.log('el select es -..',seleccion.value)
-    console.log('voy a validar token')
     //Traemos el token de localStorage
     const token = localStorage.getItem('token')||'';
 
@@ -31,7 +59,6 @@ const validarJWT = async() => {
         throw new Error('No hay token en el eservidor')
     }
 
-    //hago la petición get y para renovar token
     const resp = await fetch(enlace,{   
         headers:{'c-token':token}
     });
@@ -48,10 +75,12 @@ const validarJWT = async() => {
     parametrosIniciales(seleccion.value) //parametrosUsuario();
 
 } 
+
+
 const parametrosIniciales=async(accion)=>{
     
     await actualizarPedidos();
-    console.log('addEventListener',seleccion.value)
+    //console.log('addEventListener',seleccion.value)
     divCateProd.style.display='none'
     div_tabla_pedidoActual.innerHTML=''
 
@@ -59,6 +88,7 @@ const parametrosIniciales=async(accion)=>{
     switch(accion){
         
         case 'tomarPedido'  :
+            estoyEn.innerHTML= 'Estoy en: Tomar nuevo Pedido';
             divCateProd.style.display='block';            
             await actualizarCategorias()
             await actualizarProductos()       
@@ -66,12 +96,14 @@ const parametrosIniciales=async(accion)=>{
             break;     
 
         case 'verPedidos'  :
+            estoyEn.innerHTML= 'Estoy en: Ver pedidos';
             await actualizarCategorias()
             await actualizarProductos()
             mostrarPedidosCreados()            
             break;     
 
         case 'cancelarPedidos'  :
+            estoyEn.innerHTML= 'Estoy en: Cancelar pedidos';
             await actualizarCategorias()
             await actualizarProductos()     
             cancelarMostrarPedidos();       
@@ -87,11 +119,8 @@ const parametrosIniciales=async(accion)=>{
 
 //Selector de función
 seleccion.addEventListener("change", async ev=>{
-
-
     parametrosIniciales(seleccion.value)
 })
-
 //submit Funcion (editar con ID)
  formFuncion.addEventListener('submit',  async (ev)=>{
     ev.preventDefault();
@@ -100,13 +129,8 @@ seleccion.addEventListener("change", async ev=>{
 
 
 
-
-
-
-
-//*******************************     MOSTRAR     ******************************************** */
-
-
+//*******************************     MOSTRAR      ******************************************** */
+// Mostrar los productos, inputs de cantidades y buttons para agregar
 const mostrarCP = async() =>{
 
 
@@ -191,10 +215,15 @@ const mostrarCP = async() =>{
                     background-color:white;                                       
                     border:1px  solid black; 
                     width:30%;
-                    height:500px;
+                    min-width: 200px;
+                    height:450px;
                     margin:0px auto;
                     float:left;
                     margin:10px
+
+
+                    
+
                     
                     "
                     >
@@ -242,143 +271,14 @@ const mostrarCP = async() =>{
 
     
 }
-let pedidoActualObj={}
-const agregar = async(cantidad,nombreButton) =>{   
-    
-    const id_button = document.querySelector(`#buttonAdd_${nombreButton}`);
-    const id_input = document.querySelector(`#input_${nombreButton}`);
-
-    if(cantidad>0){
-        
-        let nombre=prod_idObj[nombreButton].nombre
-        pedidoActualObj[nombre]={
-            'cantidad':id_input.value,
-            'valorParcial': id_input.value*prod_idObj[nombreButton].precio ,
-        }       
-        
-        id_input.value=0;        
-        id_button.style.backgroundColor= "green";    
-        id_button.style.color= 'white';
-        id_button.disabled=true;
-        setTimeout(function(){
-            id_button.style.backgroundColor= "blue";    
-            id_button.style.color= 'white';
-            id_button.disabled=false;
-            }, 700);
-
-        verPedidoActual();
-    }
-}
 
 
 
-let valorTotal=0;
-let pedidosHoy=[]
-const montarPedido = async() =>{
+//*******************************     TABLAS     ******************************************** */
 
-    let crud='POST';
-
-
-    if(mostrarPedidosHoy.length==0){
-        crud='POST'
-    }else{
-        crud='PUT';
-    }
-        
-
-    pedidosHoy=mostrarPedidosHoy;
-
-    let objPedido={
-        'pedido':pedidoActualObj,
-        'total': valorTotal,
-        'creado': usuario.uid,
-        'anulado':false,
-        'anuladoPor':''  
-    }
-    console.log('pedidosHoy antes del pusch',pedidosHoy)
-    pedidosHoy.push(objPedido)
-    console.log('pedidosHoy es ',pedidosHoy)
-    pedidoActualObj={}
-    div_tabla_pedidoActual.innerHTML='';
-    (crud==="PUT")
-        ? await editar_db('nuevoPedido',pedidosHoy,crud, pedidosFecha[diaHoy].uid)
-        : await editar_db('nuevoPedido',pedidosHoy,crud, '');
-}
-const editar_db = async(funcion,arreglo, accion,id) =>{
-    let formData={};     
-    let enlace='';
-    let crud=accion;
-    
-    let fecha=  (Number(d.getMonth())+1 ) +'-'+ d.getFullYear()
-
-        if(funcion=='nuevoPedido'){
-            if(crud=='POST'){
-                enlace=enlaceVentas;
-            }else{
-                console.log('pedidosFecha[diaHoy]',pedidosFecha[diaHoy])
-                enlace=enlaceVentas+pedidosFecha[diaHoy].uid
-            }
-        
-        formData['dia']=diaHoy;
-        formData['fecha']=fecha;
-        formData['arregloVentas']=arreglo;
-        formData['rol']=usuario.rol;
-        
-        }
-
-        if(funcion=='editarPedido'){
-
-            formData['arregloVentas']=arreglo;
-            formData['rol']=usuario.rol;
-            enlace=enlaceVentas+id;
-        }
-
-        console.log('crud es ',crud)
-        console.log('formData es ',formData)
-        console.log('el enlace es ',enlace)
-        
-
-        await fetch(enlace,{
-            method: crud,
-            body: JSON.stringify(formData),
-            headers:{
-                'Content-Type':'application/json',
-                'c-token':localStorage.getItem('token')
-            }
-        })
-        .then(resp =>resp.json()) //Extraemos el .json
-        .then( async (resp)=> {
-            console.log('la respuesta de la petición es');
-            console.log(resp)
-            if(!resp.venta){
-                if(!resp.dia){
-                    return console.error('error');
-                }
-            } 
-            //divFormDatos.style.display ='none';
-            //divFormImg.style.display='block';
-            
-            
-            button_montarPedido.style.backgroundColor= "#89ff5c";    
-            button_montarPedido.style.color= '#3d3d3d';
-            
-            setTimeout(function(){
-                console.log('estoy en el temporizador')
-                button_montarPedido.style.backgroundColor= "blue";    
-                button_montarPedido.style.color= 'white';
-                }, 1200);
-
-        })
-        .catch(err=>{
-            console.log(err) 
-        })
-}
-
-
-let mostrarPedidosHoy=[]
 const mostrarPedidosCreados = async() =>{
     
-    console.log('estoy en mostrarPedidosCreados')
+    //console.log('estoy en mostrarPedidosCreados')
     let tabla_pedidoActual=`
     <table class="table table-dark" >
     <thead>
@@ -396,7 +296,7 @@ const mostrarPedidosCreados = async() =>{
     <tbody>  
     `
     ventas.forEach((data,i)=>{
-        console.log('el valor es ... ',data)
+        //console.log('el valor es ... ',data)
 
                 data.arregloVentas.forEach((valorTemp,v)=>{
 
@@ -412,9 +312,9 @@ const mostrarPedidosCreados = async() =>{
                     let cantHtlm='';
                     for(let ii=0; ii< nombres.length; ii++){
                         let nombre = nombres[ii];
-                        console.log('valorTemp.pedido esss',valorTemp.pedido)
-                        console.log('nombre esss',nombre)
-                        console.log('valorTemp.pedido[nombre] ess',valorTemp.pedido[nombre])
+                        //console.log('valorTemp.pedido esss',valorTemp.pedido)
+                        //console.log('nombre esss',nombre)
+                        //console.log('valorTemp.pedido[nombre] ess',valorTemp.pedido[nombre])
                         prodHtml+=
                         `
                             ${nombre}<br>                      
@@ -447,27 +347,6 @@ const mostrarPedidosCreados = async() =>{
     div_tabla_pedidoActual.innerHTML=tabla_pedidoActual 
 }
 
-const anular = async(posicionVector,id_anular,variable,funcion) =>{
-    console.log('el posicionVector a anular es ...',posicionVector)
-    console.log('el id a anular es ...',id_anular)
-    console.log('variable anular es ...',variable)
-    console.log('pedidosObj[id_anular] es ...',pedidosObj[id_anular])
-    console.log('pedidosObj[id_anular].arregloVentas[v] es ...',pedidosObj[id_anular].arregloVentas[variable])
-    
-    if(funcion=='anular'){
-        pedidosObj[id_anular].arregloVentas[variable].anulado=true;
-    }else{
-        pedidosObj[id_anular].arregloVentas[variable].anulado=false;
-    }
-    pedidosObj[id_anular].arregloVentas[variable].anuladoPor=usuario.uid;
-
-    ventas[posicionVector]=pedidosObj[id_anular]
-    console.log('ventas es ', ventas);
-    await editar_db('editarPedido',pedidosObj[id_anular].arregloVentas,'PUT',id_anular)
-    await cancelarMostrarPedidos();
-}
-
-
 const cancelarMostrarPedidos = async() =>{
     
     console.log('estoy en cancelarMostrarPedidos')
@@ -491,7 +370,7 @@ const cancelarMostrarPedidos = async() =>{
     <tbody>  
     `
     ventas.forEach((data,i)=>{
-        console.log('el valor es ... ',data)
+        //console.log('el valor es ... ',data)
 
                 data.arregloVentas.forEach((valorTemp,v)=>{
 
@@ -561,29 +440,17 @@ const cancelarMostrarPedidos = async() =>{
                             <td>${data.arregloVentas[v].anuladoPor}</td>
                         `
                     }
-                        
-
-
-
-
                     tabla_pedidoActual+=`
                 </tr>
                 `
                 })
-
     })
-
     tabla_pedidoActual+=`
     </tbody>
     </table>
-
     `
-
     div_tabla_pedidoActual.innerHTML=tabla_pedidoActual
-
 }
-
-
 
 const verPedidoActual = async() =>{       
 
@@ -616,9 +483,6 @@ const verPedidoActual = async() =>{
         </tr>
         `
     }
-
-
-
          tabla_pedidoActual+=`             <tr>
                         <th scope="row">Total</th>
                         <td></td>
@@ -628,56 +492,188 @@ const verPedidoActual = async() =>{
         </tbody>
         </table>
     `
-    
-    
-
     div_tabla_pedidoActual.innerHTML=tabla_pedidoActual
 }
 
 
+//***************************************   ACCIONES BUTTONS  **************************************************** */
 
+// Button --- Función agregar producto al pedido temporal
+const agregar = async(cantidad,nombreButton) =>{   
+    
+    const id_button = document.querySelector(`#buttonAdd_${nombreButton}`);
+    const id_input = document.querySelector(`#input_${nombreButton}`);
+
+    if(cantidad>0){
+        
+        let nombre=prod_idObj[nombreButton].nombre
+        pedidoActualObj[nombre]={
+            'cantidad':id_input.value,
+            'valorParcial': id_input.value*prod_idObj[nombreButton].precio ,
+        }       
+        
+        id_input.value=0;        
+        id_button.style.backgroundColor= "green";    
+        id_button.style.color= 'white';
+        id_button.disabled=true;
+        setTimeout(function(){
+            id_button.style.backgroundColor= "blue";    
+            id_button.style.color= 'white';
+            id_button.disabled=false;
+            }, 700);
+
+        verPedidoActual();
+    }
+}
+
+// Button ---  Función SUBIR pedido NUEVO db
+const montarPedido = async() =>{
+
+
+    if(!(Object.entries(pedidoActualObj).length === 0)){
+        
+        let crud='POST';
+        
+        (mostrarPedidosHoy.length==0)
+            ? crud='POST'       
+            : crud='PUT';
+        
+            
+        pedidosHoy=mostrarPedidosHoy;
+
+        let objPedido={
+            'pedido':pedidoActualObj,
+            'total': valorTotal,
+            'creado': usuario.uid,
+            'anulado':false,
+            'anuladoPor':''  
+        }
+        pedidosHoy.push(objPedido)
+        //console.log('pedidosHoy es ',pedidosHoy)
+        pedidoActualObj={}
+        div_tabla_pedidoActual.innerHTML='';
+
+        (crud==="PUT")
+            ? await editar_db('nuevoPedido',pedidosHoy,crud, pedidosFecha[diaHoy].uid)
+            : await editar_db('nuevoPedido',pedidosHoy,crud, '');
+    }
+}
+
+// Button ---  Función ANULAR pedido db
+const anular = async(posicionVector,id_anular,variable,funcion) =>{
+    //console.log('el posicionVector a anular es ...',posicionVector)
+    //console.log('el id a anular es ...',id_anular)
+    //console.log('variable anular es ...',variable)
+    //console.log('pedidosObj[id_anular] es ...',pedidosObj[id_anular])
+    //console.log('pedidosObj[id_anular].arregloVentas[v] es ...',pedidosObj[id_anular].arregloVentas[variable])
+    
+    if(funcion=='anular'){
+        pedidosObj[id_anular].arregloVentas[variable].anulado=true;
+    }else{
+        pedidosObj[id_anular].arregloVentas[variable].anulado=false;
+    }
+    pedidosObj[id_anular].arregloVentas[variable].anuladoPor=usuario.uid;
+
+    ventas[posicionVector]=pedidosObj[id_anular]
+    //console.log('ventas es ', ventas);
+    await editar_db('editarPedido',pedidosObj[id_anular].arregloVentas,'PUT',id_anular)
+    await cancelarMostrarPedidos();
+}
+
+// CRUD MONTAR pedido o ANULAR pedido
+const editar_db = async(funcion,arreglo, accion,id) =>{
+    let formData={};     
+    let enlace='';
+    let crud=accion;
+    
+    let fecha=  (Number(d.getMonth())+1 ) +'-'+ d.getFullYear()
+
+        if(funcion=='nuevoPedido'){
+            if(crud=='POST'){
+                enlace=enlaceVentas;
+            }else{
+                //console.log('pedidosFecha[diaHoy]',pedidosFecha[diaHoy])
+                enlace=enlaceVentas+pedidosFecha[diaHoy].uid
+            }
+        
+        formData['dia']=diaHoy;
+        formData['fecha']=fecha;
+        formData['arregloVentas']=arreglo;
+        formData['rol']=usuario.rol;
+        
+        }
+
+        if(funcion=='editarPedido'){
+
+            formData['arregloVentas']=arreglo;
+            formData['rol']=usuario.rol;
+            enlace=enlaceVentas+id;
+        }
+
+        //console.log('crud es ',crud)
+        //console.log('formData es ',formData)
+        //console.log('el enlace es ',enlace)
+        
+
+        await fetch(enlace,{
+            method: crud,
+            body: JSON.stringify(formData),
+            headers:{
+                'Content-Type':'application/json',
+                'c-token':localStorage.getItem('token')
+            }
+        })
+        .then(resp =>resp.json()) //Extraemos el .json
+        .then( async (resp)=> {
+            //console.log('la respuesta de la petición es');
+            //console.log(resp)
+            if(!resp.venta){
+                if(!resp.dia){
+                    return console.error('error');
+                }
+            } 
+            //divFormDatos.style.display ='none';
+            //divFormImg.style.display='block';
+            
+            actualizarPedidos()
+            button_montarPedido.style.backgroundColor= "#89ff5c";    
+            button_montarPedido.style.color= '#3d3d3d';
+            
+            setTimeout(function(){
+                //console.log('estoy en el temporizador')
+                button_montarPedido.style.backgroundColor= "blue";    
+                button_montarPedido.style.color= 'white';
+                }, 1200);
+
+        })
+        .catch(err=>{
+            console.log(err) 
+        })
+}
 
 
 
 //************************************ Crear objetos User, Prod, Catg ******************************************************** */
 
-
-let cateObj={}
 const actualizarCategorias=async ()=>{
     //console.log('estoy en actualizarCategorias')
-    const resp = await fetch(enlaceCategoria,{});
-    
-    const {categorias}= await resp.json(); 
-    
+    const resp = await fetch(enlaceCategoria,{});    
+    const {categorias}= await resp.json();     
     categorias.forEach((valor)=>{
         cateObj[valor.nombre]=valor._id
-        //console.log('el valor.estado es ',valor)        
     })     
 }
-let prodObj={}
-let prod_idObj={}
-const actualizarProductos=async ()=>{
 
-    //console.log(' estoy en actualizarProductos')
-    const resp = await fetch(enlaceProducto,{});
-    
+const actualizarProductos=async ()=>{
+    const resp = await fetch(enlaceProducto,{});    
     const {productos}= await resp.json(); 
-    let cateHtml=''
     productos.forEach((valor)=>{
         prodObj[valor.nombre]=valor;
-        prod_idObj[valor._id]=valor
-        
+        prod_idObj[valor._id]=valor        
     })        
 }
-const d=new Date()
-let diaHoy=d.getDate()+'-'+(Number(d.getMonth())+1 ) +'-'+ d.getFullYear()
-let pedidosObj={}
-let pedidosFecha={}
-let ventas=[]
+
 const actualizarPedidos=async ()=>{
-    //console.log('estoy en actualizar Pedidos')
-    const resp =
-    
 
     await fetch(enlaceVentas,{
         method: 'GET',
@@ -689,31 +685,21 @@ const actualizarPedidos=async ()=>{
 
     .then(resp =>resp.json()) //Extraemos el .json
     .then( async (resp)=> {
-        console.log('la respuesta de la petición es');
-        console.log(resp)
+        //console.log('la respuesta de la petición es');
+        //console.log(resp)
         if(resp.total==0){
             return console.error('No hay ventas guardadas');
-        } 
-        
+        }         
         ventas=  resp.ventas; 
-        console.log(ventas)    
+        //console.log(ventas)    
         ventas.forEach((valor)=>{
             pedidosObj[valor.uid]=valor
             pedidosFecha[valor.dia]=valor
-         //   //console.log('el valor.estado es ',valor)        
         }) 
         if(pedidosFecha[diaHoy]){
-            mostrarPedidosHoy=pedidosFecha[diaHoy].arregloVentas;
-            //console.log('mostrarPedidosHoy',mostrarPedidosHoy)
-            //console.log('pedidosObj',pedidosObj)
-            //console.log('pedidosFecha',pedidosFecha)
-        }    
-        
-
+            mostrarPedidosHoy=pedidosFecha[diaHoy].arregloVentas;            
+        }           
     })
-
-
-   
 }
 
 

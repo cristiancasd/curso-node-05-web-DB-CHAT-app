@@ -588,7 +588,7 @@ const mostrarBusqueda=async(arreglo,buscar)=>{
         `
         }
       
-    })
+    });
     //console.log('arreglo.length',arreglo.length);
     (arreglo.length!=0)
         ? resultadoBusqueda.innerHTML=busquedaHtml

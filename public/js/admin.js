@@ -459,6 +459,7 @@ const parametrosIniciales=async(accion)=>{
         
 
         case 'buscar':
+            estoyEn.innerHTML= 'BUSCAR'
             id_user.value='';
             divCateProd.style.display='none';   
             divUsuarios.style.display='none';            
@@ -572,7 +573,6 @@ const mostrarBusqueda=async(arreglo,buscar)=>{
                         </div>
                     </div>                        
             `
-
         }
 
         if( buscar=='/api/buscar/categorias/'){
@@ -593,9 +593,6 @@ const mostrarBusqueda=async(arreglo,buscar)=>{
     (arreglo.length!=0)
         ? resultadoBusqueda.innerHTML=busquedaHtml
         : resultadoBusqueda.innerHTML=`<h5 >No hay resultados en la busqueda</h5> ` ;
-
-
-
 }
 
 const mostrar=async()=>{

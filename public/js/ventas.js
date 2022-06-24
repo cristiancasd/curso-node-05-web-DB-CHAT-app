@@ -154,11 +154,11 @@ const mostrarCP = async() =>{
         arregloCate.push(nombre);
         arregloCateObj[nombre]=[]        
         cateHtml+=`
-        <li>
+        
             <p>
                 <a href="#${nombre}" class="text-success">${nombre}</h5>                
             </p>
-        </li>
+        
         `
     })
 

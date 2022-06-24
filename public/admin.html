@@ -65,7 +65,7 @@
                 placeholder="Escribir ID" 
                 >
 
-                <button id="selectButton"  type="submit" class = "btn btn-primary">Escoger Funcion</button>
+                <button id="selectButton"  type="submit" class = "btn btn-primary">Reiniciar Función</button>
                
             </form>
 
@@ -86,7 +86,7 @@
                     <h5 >Cambiar Foto</h5>
 
                     <img id="fotoUser" src='' width="300" height="300">
-                    <input id="fileupload" type="file" name="fileupload" />  
+                    <input id="fileupload" type="file" name="fileupload" onchange="handler"/>  
                     <button id="upload_button"  type="submit" class = "btn btn-primary"> Cambiar Foto</button>
                 </form>
             </div>

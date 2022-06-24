@@ -9,7 +9,9 @@
 
 </head>
 <body class="container">
-   
+
+  
+    
   
     <div class="row mt-5" style="justify-content: center">
         <div class="col-sm-6" style="justify-content: center">
@@ -44,11 +46,22 @@
         <div class="col-sm-6">
             <h3>Eviar Mensaje</h3>
             <hr>
+            <label
+                id="label_privado"
+                style="display:none"
+            >hola</label>
+
+            <button  id="button_privado" style="display:none"
+            onclick="limpiarId()" class="btn btn-dark">
+                x 
+            </button>
             <input type="text"
                 id="txtUid"
                 class="form-control mb-2"
-                placeholder="uid"
+                placeholder="ID mensaje privado"
                 autocomplete="off"
+                style="display:none"
+                disabled
                 >
             
             <input type="text"
@@ -75,23 +88,14 @@
 
     </div>
 
-    <button id ="btnSalir"  onclick="salir()" class="btn btn-outline-danger">
-        Logout
-    </button>
-    <a id ="editarPerfil"  href="editarperfil.html" class="btn btn-primary" >
-        Editar Perfil
-    </a>
-
-    <a id ="editarPerfil"  href="index.html" class="btn btn-secondary" >
-        Volver al Index
-    </a>
+    
 
     
 
 
     <div class="row mt-5">
         <div class="col-sm-6">
-            <h3>Chat Privado</h3>
+            <h3>Mensajes Privados</h3>
             <hr>
             <ul id="ulMensajesPriv">
                 
@@ -99,7 +103,16 @@
 
         </div>
     </div>
+    <button id ="btnSalir"  onclick="salir()" class="btn btn-outline-danger">
+        Logout
+    </button>
+    <a id ="editarPerfil"  href="editarperfil.html" class="btn btn-success" >
+        Editar Perfil
+    </a>
 
+    <a id ="editarPerfil"  href="index.html" class="btn btn-secondary" >
+        Volver al Index
+    </a>
     <script src="./socket.io/socket.io.js"></script> 
     <script src="./js/chat.js"></script> 
 

@@ -186,7 +186,7 @@ const  dibujarUsuarios=async(usuarios=[])=>{
                 <li>
                     <p>       
                         <a href=""></a>               
-                        <a href="javascript:irPrivado('${usuario.uid}')" class="text-success">${usuario.nombre}</a>                   
+                        <a href="javascript:irPrivado('${usuario.uid}','${usuario.nombre}')" class="text-success">${usuario.nombre}</a>                   
                         
                         <span class="fs-6 text-muted">  ${usuario.uid}</span>
                         <span class="fs-6 text-muted">${sal}</span>
@@ -290,8 +290,20 @@ txtMensaje.addEventListener('keyup',({keyCode})=>{
     txtMensaje.value = '';
 })
 
-const irPrivado=(id)=>{
+const irPrivado=(id,nombre)=>{
+    label_privado.innerHTML=`Mensaje Privado a: ${nombre}`
+    label_privado.style="display:inline-block"
+    button_privado.style="display:inline-block"
     txtUid.value=id
+    //console.log('el id es', id)
+    //var edad = prompt('Cuantos años tienes?', '100');
+}
+
+const limpiarId=()=>{
+    label_privado.innerHTML=`Mensaje Privado a:`
+    label_privado.style="display:none"
+    button_privado.style="display:none"
+    txtUid.value='';
     //console.log('el id es', id)
     //var edad = prompt('Cuantos años tienes?', '100');
 }

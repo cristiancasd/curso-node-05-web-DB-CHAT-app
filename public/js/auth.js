@@ -7,11 +7,14 @@ const ventas_rol   = document.querySelector('#ventas_rol');
 const user_rol   = document.querySelector('#user_rol'); 
 const userLog   = document.querySelector('#userLog'); 
 
-const miFormulario = document.querySelector('form'); //Formulario html
+const loginManual = document.querySelector('#loginManual'); //Formulario html
 
 const enlace='/api/auth/'  
 const enlaceCategoria='api/categorias'   
 const enlaceProducto='api/productos'      
+
+
+const button=document.getElementById('google_signout')
 
 
 
@@ -24,6 +27,7 @@ const mostrar = async() =>{
     const resp2 = await fetch(enlaceProducto,{});
     const {total:totalP, productos}= await resp2.json(); 
 
+    categorias.push({'nombre':'OTROS'});
     let cateHtml='';
     let cateProdHtml='';
     let arregloCate=[];
@@ -33,21 +37,31 @@ const mostrar = async() =>{
         arregloCate.push(nombre);
         arregloCateObj[nombre]=[]        
         cateHtml+=`
-        <li>
+        
             <p>
                 <a href="#${nombre}" class="text-success">${nombre}</h5>                
             </p>
-        </li>
+        
         `
     })
 
+    let h=0;
     //Separo productos por categoria
     productos.forEach((data)=>{
+        h=0;
+        
         arregloCate.forEach((valor,i)=>{
-            if(valor==data.categoria.nombre){
-                arregloCateObj[valor].push(data)
+            if(data.categoria){ //Si se ha borrado la categoría esta es null
+
+                if(valor==data.categoria.nombre){
+                    arregloCateObj[valor].push(data);
+                    h=1;
+                }
             }
         })
+        if(h==0){
+            arregloCateObj['OTROS'].push(data)
+        }
     })
 
     let imgProducto='';
@@ -122,9 +136,14 @@ const validarJWT = async() => {
     //Traemos el token de localStorage
     const token = localStorage.getItem('token')||'';
 
+    divUserLog.style.display='none'
+    google_signout.style.display='inline-block'
+
     if (token.length <= 10){ //No hay token
         //throw new Error('No hay token en el eservidor')
         console.log('no hay Token')
+        divUserLog.style.display='block'
+        google_signout.style.display='none'
         return
     }
 
@@ -137,6 +156,9 @@ const validarJWT = async() => {
     const {usuario: userDb, token:tokenDB}= await resp.json(); 
 
     if(!userDb){
+        console.log('usuario no valido')
+        divUserLog.style.display='block'
+        google_signout.style.display='none'
         localStorage.clear();
         return;
     }  
@@ -149,12 +171,12 @@ const validarJWT = async() => {
 } 
 
 
-miFormulario.addEventListener('submit', ev=>{
+loginManual.addEventListener('submit', ev=>{
     ev.preventDefault();//Que en el submit no se recargue la pagina
     const formData={};
 
     //Creo un arreglo con los elementos del formulario
-    for(let el of miFormulario.elements){
+    for(let el of loginManual.elements){
         if(el.name.length>0) 
         formData[el.name]=el.value
     }    
@@ -167,13 +189,13 @@ miFormulario.addEventListener('submit', ev=>{
     })
     .then(resp =>resp.json()) //Extraemos el .json
     .then(data=>{
-        if(!data.msg){ //no pasó validaciones
-            console.log('está super malo todo')
+        if(!data.msg||data.msg!='Login ok'){ //no pasó validaciones
+            window.alert(data.msg)
             return console.error(data.msg);
         }
+        divUserLog.style.display='none'
+        google_signout.style.display='block'
         localStorage.setItem('token',data.token);//token al localstorage
-
-
         verRole(data.usuario.rol, data.usuario.nombre)
         
 
@@ -204,13 +226,13 @@ function handleCredentialResponse(response) {
                 
             localStorage.setItem('token',data.token);
        
-
+            divUserLog.style.display='none'
+            google_signout.style.display='block'
             verRole(data.usuario.rol,data.usuario.nombre)
         })
         .catch(console.warn);           
 }
 
-const button=document.getElementById('google_signout')
 
 //Sign Out de google
 button.onclick=()=>{     
@@ -218,7 +240,9 @@ button.onclick=()=>{
     google.accounts.id.revoke(localStorage.getItem('email'),done=>{ //funcion para hacer logout
         localStorage.clear(); //borro el token                                         
         location.reload();//Reecargo la página
-    });        
+    });
+    divUserLog.style.display='block'
+    google_signout.style.display='none'        
 }
 
 const verRole=(role,nombre) =>{

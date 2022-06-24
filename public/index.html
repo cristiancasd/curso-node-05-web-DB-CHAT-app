@@ -13,7 +13,8 @@
 
     <section>
         <div class="container">
-
+            
+            <!-- categorias y productos -->
             <div class="row" style="justify-content:center" >
                 <div class="col" style="justify-content: center" >
                     <div  style=" background-color: black" >
@@ -45,58 +46,74 @@
 
             <br>
             <br>
-
-
-            <h5 id="userLog"class="text-success" style="
-                background-color:#373636; text-decoration-color: beige; text-align: center;
-                ">Autenticacion</h5>
-            <div class="row mt-5">
-                <div class="col-sm-6">
-                    <h1>Google Sign in</h1>
-                    <hr>
-                    <br>
-
-                    <div id="g_id_onload"        
-                    data-client_id="117929405883-ttr09q9suvdlhln8jaufo8lhdjrur12r.apps.googleusercontent.com"
-                    data-auto_prompt="false"
-                    data-callback="handleCredentialResponse"
-                    data-auto_select="true"></div>
-                            
-
-                    <div class="g_id_signin"
-                    data-type="standard"
-                    data-size="large"
-                    data-theme="outline"
-                    data-text="sign_in_with"
-                    data-shape="rectangular"
-                    data-logo_alignment="left"></div>
-                    <br>
-
-                    <button id="google_signout">
+            
+            <!-- Autenticacion -->
+            <div class="row" style="justify-content:center" >
+                <h5 id="userLog"class="text-success" style="
+                        display: inline-block;
+                        background-color:#373636; 
+                        text-decoration-color: beige; text-align: center;
+                        ">Autenticacion   
+                    </h5>
+                    <button id="google_signout" class="btn btn-outline-danger">
                         SignOut
                     </button>
-                </div>
-                <div class="col-sm-6">
-                    <h1>Login Manual</h1>
-                    <hr>
-                    <br>
-                    <form class="d-grid">
-                        <div class="col-sm-6" >
-                            <input type="text" name="correo" class="form-control mb-2" placeholder="Correo">
-                            <input type="text" name="password" class="form-control mb-2" placeholder="Password">
-                        </div>
+                
 
-                        <button type="submit" class = "btn btn-primary">
-                            Ingresar
-                        </button>
-                    </form>
-                </div>        
-            </div>    
+                <div id="divUserLog">
+                    <div class="row mt-5">
+                        <div class="col-sm-6">
+                            <h1>Google Sign in</h1>
+                            <hr>
+                            <br>
+
+                            <div id="g_id_onload"        
+                            data-client_id="117929405883-ttr09q9suvdlhln8jaufo8lhdjrur12r.apps.googleusercontent.com"
+                            data-auto_prompt="false"
+                            data-callback="handleCredentialResponse"
+                            data-auto_select="true"></div>
+                                    
+
+                            <div class="g_id_signin"
+                            data-type="standard"
+                            data-size="large"
+                            data-theme="outline"
+                            data-text="sign_in_with"
+                            data-shape="rectangular"
+                            data-logo_alignment="left"></div>
+                            <br>
+
+                            
+                        </div>
+                        <div class="col-sm-6">
+                            <h1>Login Manual</h1>
+                            <hr>
+                            <br>
+                            <form id=loginManual class="d-grid">
+                                <div class="col-sm-6" >
+                                    <input type="text" name="correo" class="form-control mb-2" placeholder="Correo">
+                                    <input type="password" name="password" class="form-control mb-2" placeholder="Password">
+                                
+                                    <button type="submit" class = "btn btn-primary">
+                                        Ingresar
+                                    </button>
+                                </div>
+
+                                
+                            </form>
+                        </div>        
+                    </div>    
+                </div>
+
+                
+            </div>
+        
         </div>
     </section>
     
     <section >
-        <div class="container" style="margin:40px">
+        <div class="container" style="margin: 30px auto">
+            
             <div class="row" style="justify-content: center">
                 <div class="col-sm-6" style="justify-content: center">
             

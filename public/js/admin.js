@@ -147,6 +147,9 @@ const validarJWT = async() => {
 } 
 const parametrosIniciales=async(accion)=>{
 
+    upload_button.style.display="none"
+    upload_buttonP.style.display="none"
+
     estado.style.display='none';
     estadoCategoria.style.display='none';
     divBuscar.style.display='none';
@@ -224,7 +227,6 @@ const parametrosIniciales=async(accion)=>{
                 
                     
                     nombre.requided=true;
-                    upload_button.style.display='block'
                     fileupload.style.display='block'
 
                 if(seleccion.value=='eliminarUser'){
@@ -235,7 +237,6 @@ const parametrosIniciales=async(accion)=>{
                     rol.disabled=true;
                     nombre.requided=false;
                     change_button.innerHTML='ELIMINAR Usuario';
-                    upload_button.style.display='none'
                     fileupload.style.display='none'
                 }
             }
@@ -264,7 +265,6 @@ const parametrosIniciales=async(accion)=>{
             precio.disabled=false; 
             descripcion.disabled=false;   
                   
-            upload_buttonP.style.display='block'
             fileuploadP.style.display='block'
 
 
@@ -351,7 +351,6 @@ const parametrosIniciales=async(accion)=>{
                         descripcion.disabled=true;   
 
                         change_buttonP.innerHTML='ELIMINAR Producto';
-                        upload_buttonP.style.display='none'
                         fileuploadP.style.display='none'
                     }
                 }
@@ -486,7 +485,7 @@ seleccion.addEventListener("change", async ev=>{
     parametrosIniciales(seleccion.value)
 })
 
-
+ 
 
 
 
@@ -608,11 +607,9 @@ const mostrar=async()=>{
     roles.forEach((valor)=>{      
         arregloRolObj[valor]=[]        
         rolHtml+=`
-        <li>
             <p>
                 <a href="#${valor}" class="text-success">${valor}</h5>                
             </p>
-        </li>
         `
     })
 
@@ -721,11 +718,11 @@ const mostrarCP = async() =>{
         arregloCate.push(nombre);
         arregloCateObj[nombre]=[]        
         cateHtml+=`
-        <li>
+        
             <p>
                 <a href="#${nombre}" class="text-success">${nombre}</h5>                
             </p>
-        </li>
+        
         `
     })
 
@@ -733,8 +730,7 @@ const mostrarCP = async() =>{
     let h=0;
     //Separo productos por categoria
     productos.forEach((data)=>{
-        h=0;
-        
+        h=0;        
         arregloCate.forEach((valor,i)=>{
 
             if(data.categoria){ //Si se ha borrado la categoría esta es null
@@ -1007,6 +1003,20 @@ formSubirImagen.addEventListener('submit', ev=>{
             upload_button.style.backgroundColor= "#89ff5c";    
             upload_button.style.color= '#3d3d3d';
             fotoUser.src=response.img
+            upload_button.disabled=true;
+          
+
+            setTimeout(function(){               
+                
+                    upload_button.style.backgroundColor= "blue";    
+                    upload_button.style.color= 'white';
+
+                    upload_button.disabled=false;
+                    upload_button.style.display='none';
+                    
+                }, 1200);
+
+
         }else{
             parametrosIniciales(seleccion.value)
             //parametrosUsuario();
@@ -1043,13 +1053,20 @@ formSubirImagenP.addEventListener('submit', ev=>{
         if(funcionActual=='editarProd'|| funcionActual=='nuevoProd'){
             upload_buttonP.style.backgroundColor= "#89ff5c";    
             upload_buttonP.style.color= '#3d3d3d';
-            fotoUserP.src=response.img            
+            fotoUserP.src=response.img ; 
+            upload_buttonP.disabled=true;
+            upload_buttonP.style.display='none';          
 
             setTimeout(function(){               
                 
                     //console.log('estoy en el temporizador')
                     upload_buttonP.style.backgroundColor= "blue";    
                     upload_buttonP.style.color= 'white';
+                    
+                    upload_buttonP.disabled=false;
+                    upload_buttonP.style.display='none';
+                    
+                    
                     if(funcionActual=='nuevoProd') parametrosIniciales(seleccion.value) ;//parametrosProducto();   
                     
                 }, 1200);
@@ -1398,7 +1415,13 @@ usarContraseña.addEventListener("change", ev=>{
 })
 
 
+fileupload.onchange=()=>{
+    upload_button.style.display="none"
+    if(fileupload.value!='') upload_button.style.display="block"}
 
+fileuploadP.onchange=()=>{
+    upload_buttonP.style.display="none"
+    if(fileuploadP.value!='')upload_buttonP.style.display="block"}
 
 //Volver al index
 const salir=()=>{

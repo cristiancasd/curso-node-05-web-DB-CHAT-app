@@ -85,14 +85,19 @@ formSubirImagen.addEventListener('submit', ev=>{
             console.log('está super malo todo')
             return console.error(data.msg);
         }
+        upload_button.disable=true;
         upload_button.style.backgroundColor= "#89ff5c";    
         upload_button.style.color= '#3d3d3d';
         fotoUser.src=response.img
+
+        upload_button.disable=true;
 
         setTimeout(function(){
             console.log('estoy en el temporizador')
             upload_button.style.backgroundColor= "blue";    
             upload_button.style.color= 'white';
+            upload_button.disable=false;
+            upload_button.style.display='none'
             }, 1200);
 
         console.log('Success:', response.img)
@@ -161,6 +166,9 @@ formCambiarDatos.addEventListener('submit', ev=>{
 
 
 
+fileupload.onchange=()=>{
+    upload_button.style.display="none"
+    if(fileupload.value!='') upload_button.style.display="block"}
 
 
 const salir=()=>{

@@ -250,6 +250,9 @@ const parametrosIniciales=async(accion)=>{
             await actualizarCategorias()
             await actualizarProductos()
 
+            label_productosActuales.style.display='block';
+            label_categoriasActuales.style.display='none';
+
             divEditarProductos.style.display='block';
             
             //divEditarProductos.style.backgroundColor='black';
@@ -397,6 +400,9 @@ const parametrosIniciales=async(accion)=>{
         case 'eliminarCateg':
 
             await actualizarCategorias()
+
+            label_productosActuales.style.display='none';
+            label_categoriasActuales.style.display='block';
             estoyEn.innerHTML= 'CREAR NUEVA CATEGORÍA';
             divEditarProductos.style.display='block';
 
